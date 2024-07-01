@@ -7,6 +7,7 @@ import userRouter from "./routes/user.routes";
 import courseRouter from "./routes/course.routes";
 import orderRouter from "./routes/order.router";
 import notificationRoute from "./routes/notification.route";
+import analyticsRouter from "./routes/analytics.route";
 // export app
 export const app = express();
 
@@ -35,7 +36,14 @@ app.get("/test", (req: Request, res: Response, next: NextFunction) => {
 });
 
 // routes
-app.use("/api/v1", userRouter, orderRouter, courseRouter, notificationRoute);
+app.use(
+    "/api/v1",
+    userRouter,
+    orderRouter,
+    courseRouter,
+    notificationRoute,
+    analyticsRouter
+);
 
 //unknown routes
 app.use((req: Request, res: Response, next: NextFunction) => {

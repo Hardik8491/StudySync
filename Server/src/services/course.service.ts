@@ -11,11 +11,20 @@ dotenv.config();
 
 // create course
 export const createCourse = CatchAsyncError(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const course = await CourseModel.create(req.body);
-    res.status(201).json({
-      success: true,
-      course,
-    });
-  }
+    async (req: Request, res: Response, next: NextFunction) => {
+        const course = await CourseModel.create(req.body);
+        res.status(201).json({
+            success: true,
+            course,
+        });
+    }
 );
+
+// get all course
+export const getAllCourseService = async (res: Response) => {
+    const courses = await CourseModel.find().sort({ createAt: -1 });
+    res.status(201).json({
+        success: true,
+        courses,
+    });
+};

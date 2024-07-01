@@ -4,7 +4,7 @@ import { CatchAsyncError } from "../middleware/catchAsyncError";
 import ErrorHandler from "../utils/ErrorHandler";
 import cloudinary from "cloudinary";
 import { create } from "domain";
-import { createCourse } from "../services/course.service";
+import { createCourse, getAllCourseService } from "../services/course.service";
 import CourseModel from "../models/course.model";
 import redisClient from "../utils/redis";
 import mongoose from "mongoose";
@@ -13,6 +13,7 @@ import ejs from "ejs";
 import sendMailer from "../mails/sendMail";
 import notificationRoute from "../routes/notification.route";
 import NotificationModel from "../models/notification.model";
+import { getAllUserService } from "../services/user.service";
 dotenv.config();
 
 // upload course
@@ -129,29 +130,6 @@ export const getCourseByUser = CatchAsyncError(
                 success: true,
                 message: "Course deleted successfully",
             });
-        } catch (error: any) {
-            return next(new ErrorHandler(error.message, 500));
-        }
-    }
-);
-// delete course
-
-export const deleteCourse = CatchAsyncError(
-    async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const courseId = req.params.id;
-            const course = await CourseModel.findByIdAndDelete(courseId);
-            if (course) {
-                await cloudinary.v2.uploader.destroy(
-                    course.thumbnail.public_id
-                );
-                res.status(200).json({
-                    success: true,
-                    message: "Course deleted successfully",
-                });
-            } else {
-                return next(new ErrorHandler("Course not found", 404));
-            }
         } catch (error: any) {
             return next(new ErrorHandler(error.message, 500));
         }
@@ -382,6 +360,38 @@ export const addReplayToReview = CatchAsyncError(
             });
         } catch (error: any) {
             return next(new ErrorHandler(error.message, 500));
+        }
+    }
+);
+
+// get all user --only admin
+export const getAllCourse = CatchAsyncError(
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            getAllCourseService(res);
+        } catch (error: any) {
+            return next(new ErrorHandler(error.message, 400));
+        }
+    }
+);
+// delete course
+
+export const deleteCourse = CatchAsyncError(
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { id } = req.params;
+            const course = await CourseModel.findById(id);
+
+            if (!course) {
+                return next(new ErrorHandler("Course not found", 404));
+            }
+
+            res.status(200).json({
+                success: true,
+                message: "Course deleted successfully",
+            });
+        } catch (error: any) {
+            return next(new ErrorHandler(error.message, 400));
         }
     }
 );
