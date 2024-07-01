@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import ErrorHandler from "../utils/ErrorHandler";
+import ErrorHandler from "../33/ErrorHandler";
 import { CatchAsyncError } from "../middleware/catchAsyncError";
-import { generateLast12MonthsData } from "../utils/analytics.generator";
+import { generateLast12MonthsData } from "../33/analytics.generator";
 import userModel from "../models/user.model";
 
 // user analytics
@@ -53,4 +53,3 @@ export const getOrderAnalytics = CatchAsyncError(
         }
     }
 );
-

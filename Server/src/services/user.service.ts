@@ -2,7 +2,7 @@
 
 import userModel from "../models/user.model";
 import { Response } from "express";
-import redisClient from "../utils/redis";
+import redisClient from "../33/redis";
 
 export const getUserById = async (id: string, res: Response) => {
     const userJson = await redisClient.get(id);
@@ -21,8 +21,12 @@ export const getAllUserService = async (res: Response) => {
     });
 };
 
-export const updateUserRoleService = async (res: Response,id:string,role:string) => {
-    const user = await userModel.findByIdAndUpdate(id,{role},{new:true});
+export const updateUserRoleService = async (
+    res: Response,
+    id: string,
+    role: string
+) => {
+    const user = await userModel.findByIdAndUpdate(id, { role }, { new: true });
 
     res.status(201).json({
         success: true,

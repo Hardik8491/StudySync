@@ -4,10 +4,11 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { ErrorMiddleware } from "./middleware/error";
 import userRouter from "./routes/user.routes";
-import courseRouter from "./routes/course.routes";
+import courseRouter from "./routes/course.router";
 import orderRouter from "./routes/order.router";
 import notificationRoute from "./routes/notification.route";
-import analyticsRouter from "./routes/analytics.route";
+import analyticsRouter from "./routes/analytics.router";
+import layoutRouter from "./routes/layout.router";
 // export app
 export const app = express();
 
@@ -42,7 +43,8 @@ app.use(
     orderRouter,
     courseRouter,
     notificationRoute,
-    analyticsRouter
+    analyticsRouter,
+    layoutRouter
 );
 
 //unknown routes
