@@ -5,7 +5,7 @@
 
 // const redisClient = () => {
 //   if (process.env.REDIS_URL) {
-//     console.log("Redis connected");
+//     console.log("Redis are connected");
 //     return process.env.REDIS_URL;
 //   }
 //   throw new Error("Redis not connected");
@@ -13,24 +13,20 @@
 
 // export const redisConnection = new redis(redisClient());
 
-// export { redis };
-
-import Redis from "ioredis";
+// export default redisClient;
+import redis from "ioredis";
 import dotenv from "dotenv";
-
 dotenv.config();
 
-const redisClient = new Redis(process.env.REDIS_URL as string, {
-  maxRetriesPerRequest: null,
-  enableReadyCheck: false,
-});
+const getRedisUrl = () => {
+    if (process.env.REDIS_URL) {
+        console.log("Redis are connected");
+        return process.env.REDIS_URL;
+    }
+    throw new Error("Redis not connected");
+};
 
-redisClient.on("connect", () => {
-  console.log("Redis connected");
-});
-
-redisClient.on("error", (err) => {
-  console.error("Redis connection error:", err);
-});
+const redisClient = new redis(getRedisUrl());
 
 export default redisClient;
+

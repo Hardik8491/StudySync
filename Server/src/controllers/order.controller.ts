@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
 import { CatchAsyncError } from "../middleware/catchAsyncError";
-import ErrorHandler from "../33/ErrorHandler";
+import ErrorHandler from "../utils/ErrorHandler";
 import cloudinary from "cloudinary";
 import { create } from "domain";
 import { createCourse } from "../services/course.service";
 import CourseModel, { ICourse } from "../models/course.model";
-import redisClient from "../33/redis";
+import redisClient from "../utils/redis";
 import mongoose from "mongoose";
 import path from "path";
 import ejs from "ejs";

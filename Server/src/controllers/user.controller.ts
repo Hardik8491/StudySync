@@ -1,15 +1,19 @@
 import { Request, Response, NextFunction } from "express";
 import UserModel, { IUser } from "../models/user.model";
 import { CatchAsyncError } from "../middleware/catchAsyncError";
-import ErrorHandler from "../33/ErrorHandler";
+import ErrorHandler from "../utils/ErrorHandler";
 import jwt, { JwtPayload, Secret } from "jsonwebtoken";
 import ejs from "ejs";
 import cloudinary from "cloudinary";
 import dotenv from "dotenv";
 import path from "path";
 import sendMailer from "../mails/sendMail";
-import { accessTokenOptions, refreshTokenOptions, sendToken } from "../33/jwt";
-import redisClient from "../33/redis";
+import {
+    accessTokenOptions,
+    refreshTokenOptions,
+    sendToken,
+} from "../utils/jwt";
+import redisClient from "../utils/redis";
 import {
     getAllUserService,
     getUserById,
@@ -33,6 +37,8 @@ export const registrationUser = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { name, email, password }: IRegistrationBody = req.body;
+            console.log(name, email, password);
+            
             const isEmailExist = await UserModel.findOne({ email });
             if (isEmailExist) {
                 return next(new ErrorHandler("Email already exists", 400));
@@ -79,7 +85,7 @@ interface IActivationToken {
 
 export const createActivationToken = (user: any): IActivationToken => {
     const activationCode = Math.floor(
-        100000 + Math.random() * 900000
+        1000 + Math.random() * 9000
     ).toString();
     const token = jwt.sign(
         { user, activationCode },
@@ -102,10 +108,14 @@ export const activationUser = CatchAsyncError(
         try {
             const { activationCode, activationToken }: IActivationRequest =
                 req.body;
+        
+            
             const decoded = jwt.verify(
                 activationToken,
                 process.env.ACTIVATION_SECRET as Secret
             ) as { user: IUser; activationCode: string };
+            console.log(decoded.activationCode, activationCode);
+            
 
             if (activationCode !== decoded.activationCode) {
                 return next(new ErrorHandler("Invalid activation code", 400));
@@ -113,9 +123,9 @@ export const activationUser = CatchAsyncError(
             console.log(decoded.user);
 
             const { name, email, password } = decoded.user;
-            // if (!name || !email || !password) {
-            //   return next(new ErrorHandler("Invalid activation token", 400));
-            // }
+            if (!name || !email || !password) {
+              return next(new ErrorHandler("Invalid activation token", 400));
+            }
             const existUser = await UserModel.findOne({ email });
             if (existUser) {
                 return next(new ErrorHandler("User already exists", 400));
@@ -128,9 +138,12 @@ export const activationUser = CatchAsyncError(
                 message: "Account has been activated",
                 user,
             });
+        
         } catch (error: any) {
             return next(new ErrorHandler(error.message, 400));
         }
+       
+        
     }
 );
 
@@ -172,7 +185,7 @@ export const logoutUser = CatchAsyncError(
         try {
             res.clearCookie("access_token", { maxAge: 1 });
             res.clearCookie("refresh_token", { maxAge: 1 });
-            const userId = req.user?._id || "";
+            const userId = (req as any).user?._id || "";
             redisClient.del(userId as string);
             res.status(200).json({
                 success: true,
@@ -199,7 +212,12 @@ export const updateAccessToken = CatchAsyncError(
 
             const session = await redisClient.get(decode.id as string);
             if (!session) {
-                return next(new ErrorHandler("please login for access this resource", 400));
+                return next(
+                    new ErrorHandler(
+                        "please login for access this resource",
+                        400
+                    )
+                );
             }
             const user = JSON.parse(session);
             const accessToken = jwt.sign(
@@ -217,10 +235,11 @@ export const updateAccessToken = CatchAsyncError(
                 }
             );
             // Upload session to redis
-            req.user = user;
+            (req as any).user = user;
+
             res.cookie("access_token", accessToken, accessTokenOptions);
             res.cookie("refresh_token", refreshToken, refreshTokenOptions);
-            await redisClient.set(user._id, JSON.stringify(user),"EX",604800); //7 days
+            await redisClient.set(user._id, JSON.stringify(user), "EX", 604800); //7 days
             res.status(200).json({
                 status: "success",
                 accessToken,
@@ -235,7 +254,7 @@ export const updateAccessToken = CatchAsyncError(
 export const getUserInfo = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const userId = req.user?._id as string;
+            const userId = (req as any).user?._id as string;
             getUserById(userId, res);
         } catch (error: any) {
             return next(new ErrorHandler(error.message, 400));
@@ -276,7 +295,7 @@ export const updateUserInfo = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { name, email } = req.body as IUpdateUserInfo;
-            const userId = req.user?._id as string;
+            const userId = (req as any).user?._id as string;
             const user = await userModel.findById(userId);
             if (!user) {
                 return next(new ErrorHandler("User not found", 400));
@@ -320,7 +339,7 @@ export const updateUserPassword = CatchAsyncError(
                 return next(new ErrorHandler("Please enter all fields", 400));
             }
 
-            const user = await UserModel.findById(req.user?._id).select(
+            const user = await UserModel.findById((req as any).user?._id).select(
                 "+password"
             );
             if (!user) {
@@ -358,7 +377,7 @@ export const updateProfilePicture = CatchAsyncError(
         try {
             const { avatar }: IUpdateProfilePicture = req.body;
 
-            const userId = req.user?._id;
+            const userId = (req as any).user?._id as string;
             const user = await UserModel.findById(userId);
 
             if (!user) {

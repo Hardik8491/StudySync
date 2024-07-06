@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
 import { CatchAsyncError } from "../middleware/catchAsyncError";
-import ErrorHandler from "../33/ErrorHandler";
+import ErrorHandler from "../utils/ErrorHandler";
 import cloudinary from "cloudinary";
 import { create } from "domain";
 import { createCourse, getAllCourseService } from "../services/course.service";
 import CourseModel from "../models/course.model";
-import redisClient from "../33/redis";
+import redisClient from "../utils/redis";
 import mongoose from "mongoose";
 import path from "path";
 import ejs from "ejs";
@@ -84,7 +84,12 @@ export const getSingleCourse = CatchAsyncError(
                 const course = await CourseModel.findById(req.params.id).select(
                     "-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.link"
                 );
-                await redisClient.set(courseId, JSON.stringify(course),"EX",604776);
+                await redisClient.set(
+                    courseId,
+                    JSON.stringify(course),
+                    "EX",
+                    604776
+                );
 
                 res.status(200).json({ success: true, course });
             }

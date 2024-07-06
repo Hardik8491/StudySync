@@ -61,7 +61,7 @@ const userSchema: Schema<IUser> = new Schema(
             type: Boolean,
             default: false,
         },
-        Courses: [
+        courses: [
             {
                 courseId: String,
             },
@@ -91,6 +91,10 @@ userSchema.methods.signRefreshToken = async function () {
 };
 // compare user password
 userSchema.methods.comparePassword = async function (enteredPassword: string) {
+   const val = await bcryptjs.compare(enteredPassword, this.password);
+  
+    
+    
     return await bcryptjs.compare(enteredPassword, this.password);
 };
 
