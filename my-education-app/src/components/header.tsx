@@ -9,7 +9,8 @@ import CustomModel from "./custom-modal";
 import SignUp from "./auth/sign-up";
 import Login from "./auth/login";
 import Verification from "./auth/Verification";
-
+import { useSelector } from "react-redux";
+import Image from "next/image";
 
 type Props = {
     open: boolean;
@@ -22,6 +23,7 @@ type Props = {
 const Header = (props: Props) => {
     const [active, setActive] = useState(false);
     const [openSidebar, setOpenSidebar] = useState(false);
+    const { user } = useSelector((state: any) => state.auth);
 
     if (typeof window !== "undefined") {
         window.onscroll = () => {
@@ -73,11 +75,18 @@ const Header = (props: Props) => {
                                     onClick={() => setOpenSidebar(!openSidebar)}
                                 />
                             </div>
-                            <User
-                                className='cursor-pointer dark:text-white hidden 800px:block text-black'
-                                size={25}
-                                onClick={() => props.setOpen(true)}
-                            />
+                            {user ? (
+                                <>
+                                    <Image src={user.avatar} alt={user.name} />
+                                    
+                                </>
+                            ) : (
+                                <User
+                                    className='cursor-pointer dark:text-white hidden 800px:block text-black'
+                                    size={25}
+                                    onClick={() => props.setOpen(true)}
+                                />
+                            )}
                         </div>
                     </div>
                 </div>

@@ -33,10 +33,10 @@ export const refreshTokenOptions: ITokenOptions = {
     sameSite: "lax",
 };
 
-export const sendToken = (user: IUser, statusCode: number, res: Response) => {
-    const accessToken = user.signAccessToken();
+export const sendToken = async (user: IUser, statusCode: number, res: Response) => {
+    const accessToken = await user.signAccessToken();
 
-    const refreshToken = user.signRefreshToken();
+    const refreshToken = await user.signRefreshToken();
     console.log("aces:-", accessToken);
 
     // Upload session to redis
