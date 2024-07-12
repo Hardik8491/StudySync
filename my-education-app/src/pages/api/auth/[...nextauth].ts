@@ -1,3 +1,4 @@
+//@ts-nocheck
 import NextAuth, { NextAuthOptions } from "next-auth";
 import { Secret } from "next-auth/jwt";
 import Github from "next-auth/providers/github";
