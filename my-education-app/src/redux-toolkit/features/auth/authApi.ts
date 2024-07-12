@@ -1,8 +1,9 @@
+import { log } from "console";
 import { apiSlice } from "../api/apiSlice";
-import { userLogin, userRegister } from "./authSlice";
+import { userLogin, userLogout, userRegister } from "./authSlice";
 type RegistrationResponse = {
     message: string;
-    accessToken: string;
+    activationToken: string;
 };
 
 type RegistrationData = {};
@@ -19,17 +20,21 @@ export const authApi = apiSlice.injectEndpoints({
             async onQueryStarted(arg, { queryFulfilled, dispatch }) {
                 try {
                     const result = await queryFulfilled;
-                    dispatch(userRegister({ token: result.data.accessToken as string }));
+                    console.log(result);
+                    
+                    dispatch(userRegister({ accessToken: result.data.activationToken as string }));
                 } catch (error: any) {
                     console.log(error);
                 }
             },
         }),
         activation: builder.mutation({
-            query: ({ accessToken, activationCode }) => ({
+            query: ({ activationToken, activationCode }) => (
+                {
+              
                 url: "activation-user",
                 method: "POST",
-                body: { accessToken, activationCode },
+                body: { activationToken, activationCode },
                 credentials: "include" as const,
             }),
         }),
@@ -54,7 +59,47 @@ export const authApi = apiSlice.injectEndpoints({
                 }
             },
         }),
+        socialAuth: builder.mutation({
+            query: (data) => ({
+                url: "/social-auth",
+                method: "POST",
+                body: data,
+                credentials: "include" as const,
+            }),
+            async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+                try {
+                    const result = await queryFulfilled;
+                    console.log(result);
+                    dispatch(
+                        userLogin({
+                            accessToken: result.data.accessToken,
+                            user: result.data.user,
+                        })
+                    );
+                } catch (error: any) {
+                  
+                    
+                    console.log(error);
+                }
+            },
+        }),
+        logout: builder.query({
+            query: () => ({
+                url: "logout",
+                method: "GET",
+                credentials: "include" as const,
+            }),
+        async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+            try {
+               
+                dispatch(userLogout());
+            } catch (error: any) {
+                console.log(error);
+            }
+         
+        }
+        })
     }),
 });
 
-export const { useRegisterMutation, useActivationMutation,useLoginMutation } = authApi;
+export const { useRegisterMutation, useActivationMutation,useLoginMutation,useSocialAuthMutation,useLogoutQuery } = authApi;

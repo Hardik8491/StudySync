@@ -10,11 +10,8 @@ interface Props {
 }
 const Page: FC<Props> = (props) => {
     const [open, setOpen] = useState(false);
-  
-    
     const [activeItem, setActiveItem] = useState(0);
     const [route, setRoute] = useState("Login");
-    console.log(route)
     return (
         <div>
             <Heading

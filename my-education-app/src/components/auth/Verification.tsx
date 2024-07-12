@@ -18,6 +18,8 @@ type VerifyNumber = {
 
 const Verification: FC<Props> = ({ setRoute }) => {
     const { token } = useSelector((state: any) => state.auth);
+    console.log(token);
+    
     const [activation,{isSuccess,error}]=useActivationMutation();
     useEffect(()=>{
         if(isSuccess){
