@@ -7,7 +7,7 @@ import {
   useLogoutQuery,
 } from "@/redux-toolkit/features/auth/authApi";
 
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import ProfileInfo from "./ProfileInfo";
 
 type Props = {
@@ -15,20 +15,18 @@ type Props = {
 };
 
 const Profile: FC<Props> = ({ user }) => {
+  const router = useRouter();
   const [scroll, setScroll] = React.useState(false);
   const [active, setActivate] = React.useState(1);
-  const [avatar, setAvatar] = React.useState(
-    user.avatar ||
-      "/placeholder.jpg"
-  );
+  const [avatar, setAvatar] = React.useState(user.avatar || "/placeholder.jpg");
   const [logout, setLogout] = React.useState(false);
   const {} = useLogoutQuery(undefined, {
     skip: !logout ? true : false,
   });
   const logoutHandler = async () => {
-    signOut();
     setLogout(true);
-    redirect("/");
+    await signOut();
+    router.push("/");
   };
 
   if (typeof window !== "undefined") {
@@ -56,11 +54,11 @@ const Profile: FC<Props> = ({ user }) => {
           logoutHandler={logoutHandler}
         />
       </div>
-      {
-        active === 1 && (
-          <ProfileInfo/>
-        )
-      }
+      {active === 1 &&(
+        <div className="w-full h-full bg-transparent mt-[80px]">
+           <ProfileInfo avatar={avatar} user={user} />
+        </div>
+      )}
     </div>
   );
 };

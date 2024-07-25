@@ -12,7 +12,10 @@ import Verification from "./auth/Verification";
 import { useSelector } from "react-redux";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { useSocialAuthMutation } from "@/redux-toolkit/features/auth/authApi";
+import {
+  useLogoutQuery,
+  useSocialAuthMutation,
+} from "@/redux-toolkit/features/auth/authApi";
 import toast from "react-hot-toast";
 const placeholder =
   "https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg";
@@ -30,26 +33,34 @@ const Header = (props: Props) => {
   const [openSidebar, setOpenSidebar] = useState(false);
   const { user } = useSelector((state: any) => state.auth);
   console.log(user);
-  
-  const {data}=useSession();
-  const [socialAuth,{isSuccess,error}]=useSocialAuthMutation();
 
-  useEffect(()=>{
-    if(!user){
-        if(data){
-            socialAuth({
-                email:data?.user?.email,
-                name:data?.user?.name,
-                avatar:data?.user?.image
-            })
-        }
+  const { data } = useSession();
+  const [logout, setLogout] = React.useState(false);
+  const [socialAuth, { isSuccess, error }] = useSocialAuthMutation();
+  const {} = useLogoutQuery(undefined, {
+    skip: !logout ? true : false,
+  });
+  useEffect(() => {
+    if (!user) {
+      if (data) {
+        socialAuth({
+          email: data?.user?.email,
+          name: data?.user?.name,
+          avatar: data?.user?.image,
+        });
+      }
+      if(data===null){
         if(isSuccess){
-         toast.success("Login successful");
+          toast.success("Login Successfully")
         }
+      }
+      if (isSuccess) {
+        if (data === null) {
+          setLogout(true);
+        }
+      }
     }
-  },[data, user])
-
-  
+  }, [data, user]);
 
   if (typeof window !== "undefined") {
     window.onscroll = () => {
@@ -101,15 +112,14 @@ const Header = (props: Props) => {
               {user ? (
                 <>
                   <Link href="/profile">
-                  
-                  <div className="relative h-8 w-8">
-                    <Image
-                      src={user.avatar ?? "/placeholder.jpg"}
-                      fill
-                      className="rounded-full "
-                      alt={user.name}
-                    />
-                  </div>
+                    <div className="relative h-8 w-8">
+                      <Image
+                        src={user.avatar ?? "/placeholder.jpg"}
+                        fill
+                        className="rounded-full "
+                        alt={user.name}
+                      />
+                    </div>
                   </Link>
                 </>
               ) : (
