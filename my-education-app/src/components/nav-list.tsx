@@ -14,19 +14,8 @@ export const navItemData = [
     },
     {
         id: 3,
-        name: "About",
-        link: "/about",
-    },
-    {
-        id: 4,
-        name: "Policy",
-        link: "/policy",
-    },
-
-    {
-        id: 5,
-        name: "FAQ",
-        link: "/faq",
+        name: "Become An Instructor",
+        link: "/instructor",
     },
 ];
 interface Props {
@@ -43,9 +32,9 @@ const NavItems: React.FC<Props> = ({ activeItem, isMobile }) => {
                             <span
                                 className={`${
                                     activeItem === index
-                                        ? "dark:text-[#37a39a] text-[crimson]"
+                                        ? "dark:text-[#37a39a] text-[#37a39a]"
                                         : "dark:text-white text-black"
-                                } text-[18px] px-6 font-Poppins font-[400]`}
+                                }  text-base px-6 font-Poppins font-[600]`}
                             >
                                 {item.name}
                             </span>
@@ -54,9 +43,9 @@ const NavItems: React.FC<Props> = ({ activeItem, isMobile }) => {
             </div>
             {isMobile && (
                 <div className='800px:hidden   mt-5'>
-                    <div className="w-full text-center py-6">
+                    <div className='w-full text-center py-6'>
                         <Link
-                        passHref
+                            passHref
                             href={"/"}
                             className={`text-[25px] font-Poppins font-[500] text-black dark:text-white`}
                         >

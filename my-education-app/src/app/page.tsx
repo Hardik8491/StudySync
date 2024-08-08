@@ -6,7 +6,6 @@ import Heading from "../utils/heading";
 import Header from "@/components/header";
 import Hero from "@/components/intro-hero";
 
-
 const Page: FC<Props> = () => {
     const [open, setOpen] = useState(false);
     const [activeItem, setActiveItem] = useState(0);
@@ -17,12 +16,15 @@ const Page: FC<Props> = () => {
                 title='StudySync'
                 description='StudySync is a platform for students to learn and get from teachers'
                 keywords='Programming,FullStack,System Design,Redux,RTK,ML'
-                
             />
-            <Header 
-            setRoute={setRoute}
-            route={route}
-            open={open} setOpen={setOpen} activeItem={activeItem} />
+            <Header
+                setRoute={setRoute}
+                route={route}
+                open={open}
+                setOpen={setOpen}
+                activeItem={activeItem}
+            />
+
             <Hero />
         </div>
     );
