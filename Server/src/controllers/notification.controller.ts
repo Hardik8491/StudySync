@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
-import cron from "node-cron";
+
 import { CatchAsyncError } from "../middleware/catchAsyncError";
 import ErrorHandler from "../utils/ErrorHandler";
 import cloudinary from "cloudinary";
@@ -56,15 +56,15 @@ export const updateNotification = CatchAsyncError(
     }
 );
 
-// delete notification --only admin
-cron.schedule("0 0 * * *", async () => {
-    try {
-        const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-        await NotificationModel.deleteMany({
-            status: "read",
-            cratedAt: { $lt: thirtyDaysAgo },
-        });
-    } catch (error: any) {
-        console.log(error);
-    }
-});
+// // delete notification --only admin
+// cron.schedule("0 0 * * *", async () => {
+//     try {
+//         const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+//         await NotificationModel.deleteMany({
+//             status: "read",
+//             cratedAt: { $lt: thirtyDaysAgo },
+//         });
+//     } catch (error: any) {
+//         console.log(error);
+//     }
+// });
