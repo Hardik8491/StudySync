@@ -23,7 +23,7 @@ StudySync is a web application designed for managing student courses and resourc
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/studysync-web-app.git
+   git clone https://github.com/Hardik8491/StudySync.git
    ```
 2. Navigate to the project directory:
    ```bash
