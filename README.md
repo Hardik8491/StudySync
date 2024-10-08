@@ -1,4 +1,4 @@
- **StudySync Web App**:
+Here's the updated `README.md` file for the **StudySync Web App**, incorporating your email and the project directory structure with separate client and server folders:
 
 ```markdown
 # StudySync Web App
@@ -30,32 +30,46 @@ StudySync is a web application designed for managing student courses and resourc
    ```bash
    cd studysync-web-app
    ```
-3. Install the dependencies:
+3. Install dependencies for both client and server:
    ```bash
+   cd client
+   npm install
+   cd ../server
    npm install
    ```
-4. Set up your environment variables:
-   - Create a `.env.local` file in the root directory and add the following:
+4. Set up your environment variables for the server:
+   - Create a `.env` file in the `server` directory and add the following:
      ```
      MONGODB_URI=your_mongodb_connection_string
      CLOUDINARY_URL=your_cloudinary_url
      JWT_SECRET=your_jwt_secret
      ```
 5. Start the development server:
-   ```bash
-   npm run dev
-   ```
+   - For the client (Next.js):
+     ```bash
+     cd client
+     npm run dev
+     ```
+   - For the server (Node.js):
+     ```bash
+     cd server
+     npm run dev
+     ```
 
 ## Project Structure
 
 ```
-├── components     # Reusable React components
-├── pages          # Next.js pages
-├── api            # API routes for the backend
-├── models         # Mongoose models for MongoDB
-├── public         # Static assets
-├── styles         # Global and component-level styles
-├── utils          # Utility functions and middleware
+├── client             # Frontend application (Next.js)
+│   ├── components     # Reusable React components
+│   ├── pages          # Next.js pages
+│   ├── public         # Static assets
+│   ├── styles         # Global and component-level styles
+│   └── utils          # Utility functions and hooks
+├── server             # Backend application (Node.js)
+│   ├── api            # API routes for the backend
+│   ├── models         # Mongoose models for MongoDB
+│   ├── middleware     # Express middleware
+│   └── utils          # Utility functions
 ```
 
 ## Contributing
@@ -68,11 +82,11 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Contact
 
-For any questions or feedback, please reach out to me at [your-email@example.com].
+For any questions or feedback, please reach out to me at [hardikbhammar808@gmail.com](mailto:hardikbhammar808@gmail.com).
 
 ---
 
 **Happy Coding!**
 ```
 
-This file provides a comprehensive overview of the app and guides users through installation, setup, and structure.
+This version includes your contact information and reflects the structure of the project with separate `client` and `server` directories.
