@@ -1,4 +1,3 @@
-Here's the updated `README.md` file for the **StudySync Web App**, incorporating your email and the project directory structure with separate client and server folders:
 
 ```markdown
 # StudySync Web App
