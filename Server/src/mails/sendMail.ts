@@ -11,7 +11,7 @@ interface EmailOptions {
   template: string;
   data: { [key: string]: any };
 }
-console.log(process.env.SMTP_MAIL, process.env.SMTP_PASSWORD, process.env.SMTP_SERVICE, process.env.SMTP_PORT, process.env.SMTP_HOST) ;
+
 
 const sendMailer = async (options: EmailOptions): Promise<void> => {
   const transporter: Transporter = nodemailer.createTransport({

@@ -37,7 +37,7 @@ export const sendToken = async (user: IUser, statusCode: number, res: Response) 
     const accessToken = await user.signAccessToken();
 
     const refreshToken = await user.signRefreshToken();
-    console.log("aces:-", accessToken);
+  
 
     // Upload session to redis
     redisClient.set(user._id as string, JSON.stringify(user) as any);
