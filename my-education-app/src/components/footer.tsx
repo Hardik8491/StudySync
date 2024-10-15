@@ -51,7 +51,7 @@ const Footer = () => {
     //     </p>
     //   </div>
     // </div>
-    <footer className="bg-muted/30 black:bg-gradient-to-r from-slate-900/10 to-stone-800/50 py-12 text-muted-foreground">
+    <footer className="bg-muted/50 black:bg-gradient-to-r  from-slate-900/10 to-stone-800/50 py-12 text-muted-foreground">
     <div className="container mx-auto grid grid-cols-1 gap-10 px-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       <div className="flex flex-col items-start gap-4">
       <Link

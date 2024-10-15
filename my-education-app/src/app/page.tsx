@@ -21,6 +21,8 @@ import Link from "next/link";
 import { Button } from "@/components/new-york/ui/button";
 import HeroBanner from "@/components/hero";
 import Courses from "./courses/page";
+import EnhancedHomepage from "@/components/enhanced-homepage";
+import PricingPlans from "@/components/pricing-plans";
 const url = process.env.NEXT_PUBLIC_SERVER_URL;
 
 const Page: FC<Props> = () => {
@@ -29,142 +31,15 @@ const Page: FC<Props> = () => {
   const [route, setRoute] = useState("Login");
 
   return (
-    <div className="bg-gradient-to-r from-slate-900/10 to-stone-800/50 ">
+    <div className="bg-muted/50 dark:bg-gradient-to-r from-slate-900/10 to-stone-800/50 ">
       <Heading
         title="StudySync"
         description="StudySync is a platform for students to learn and get from teachers"
         keywords="Programming,FullStack,System Design,Redux,RTK,ML"
       />
-      {/* <Header
-                setRoute={setRoute}
-                route={route}
-                open={open}
-                setOpen={setOpen}
-                activeItem={activeItem}
-            /> */}
-
-      {/* <Hero /> */}
+     
       <HeroBanner />
-      {/* list of courses */}
-      {/* <section className="py-12 md:py-20 relative  mb-2">
-      <div className="bg-black blur-2xl absolute h-full w-full opacity-30 hero_animation"></div>
-        <div className="container ">
-          <div className="relative items-center flex justify-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-8">
-            Featured Courses
-          </h2>
-          <div className="absolute inset-0  hero_animation xl:h-[50vh] xl:w-[50vh] blur-3xl  rounded-full -top-10  border opacity-50 left-[40%] " />
-          </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <div className="bg-card rounded-lg overflow-hidden shadow-md animate-slide-up">
-              <img
-                src="/placeholder.svg"
-                width={400}
-                height={225}
-                alt="Course 1"
-                className="w-full h-48 object-cover"
-                style={{ aspectRatio: "400/225", objectFit: "cover" }}
-              />
-              <div className="p-4">
-                <h3 className="text-xl font-bold mb-2">
-                  Introduction to Web Development
-                </h3>
-                <p className="text-muted-foreground mb-4">
-                  Learn the fundamentals of web development and build your first
-                  website.
-                </p>
-                <Link
-                  href="#"
-                  className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                  prefetch={false}
-                >
-                  View Course
-                </Link>
-              </div>
-            </div>
-            <div className="bg-card rounded-lg overflow-hidden shadow-md animate-slide-up delay-100">
-              <img
-                src="/placeholder.svg"
-                width={400}
-                height={225}
-                alt="Course 2"
-                className="w-full h-48 object-cover"
-                style={{ aspectRatio: "400/225", objectFit: "cover" }}
-              />
-              <div className="p-4">
-                <h3 className="text-xl font-bold mb-2">
-                  Data Science Fundamentals
-                </h3>
-                <p className="text-muted-foreground mb-4">
-                  Dive into the world of data science and learn how to analyze
-                  and interpret data.
-                </p>
-                <Link
-                  href="#"
-                  className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                  prefetch={false}
-                >
-                  View Course
-                </Link>
-              </div>
-            </div>
-            <div className="bg-card rounded-lg overflow-hidden shadow-md animate-slide-up delay-200">
-              <img
-                src="/placeholder.svg"
-                width={400}
-                height={225}
-                alt="Course 3"
-                className="w-full h-48 object-cover"
-                style={{ aspectRatio: "400/225", objectFit: "cover" }}
-              />
-              <div className="p-4">
-                <h3 className="text-xl font-bold mb-2">
-                  Mastering Digital Marketing
-                </h3>
-                <p className="text-muted-foreground mb-4">
-                  Explore the latest digital marketing strategies and techniques
-                  to grow your business.
-                </p>
-                <Link
-                  href="#"
-                  className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                  prefetch={false}
-                >
-                  View Course
-                </Link>
-              </div>
-            </div>
-            <div className="bg-card rounded-lg overflow-hidden shadow-md animate-slide-up delay-300">
-              <img
-                src="/placeholder.svg"
-                width={400}
-                height={225}
-                alt="Course 4"
-                className="w-full h-48 object-cover"
-                style={{ aspectRatio: "400/225", objectFit: "cover" }}
-              />
-              <div className="p-4">
-                <h3 className="text-xl font-bold mb-2">
-                  Artificial Intelligence Fundamentals
-                </h3>
-                <p className="text-muted-foreground mb-4">
-                  Discover the world of AI and learn how to build intelligent
-                  systems.
-                </p>
-                <Link
-                  href="#"
-                  className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                  prefetch={false}
-                >
-                  View Course
-                </Link>
-              </div>
-            </div>
-          </div>
->>>>>>> 80b95ab1498a8ae36dc3aca4fbda18406f2e4be0
-        </div>
-      </section> */}
+  
       <Courses />
       <section className="pt-20 md:pt-0 py-12 md:py-20  relative h-full">
         {/* <div className="bg-black blur-2xl absolute h-full w-full opacity-30 hero_animation"></div> */}
@@ -225,8 +100,11 @@ const Page: FC<Props> = () => {
               <span className="text-sm font-medium">Technology</span>
             </Link>
           </div>
-          <div className="flex justify-center mt-8">
-            <Button variant="default">Show More</Button>
+          <div className="flex justify-center mt-8 ">
+          <Link href="/courses"     className="z-50"       prefetch={false}>
+
+          <Button variant="default">Show More</Button>
+          </Link>
           </div>
         </div>
       </section>
@@ -326,7 +204,11 @@ const Page: FC<Props> = () => {
           </div>
         </div>
       </section>
+      <section>
+        <PricingPlans/>
+      </section>
     </div>
+  
   );
 };
 

@@ -9,11 +9,12 @@ import { Provider } from "./provider";
 import { SessionProvider } from "next-auth/react";
 import Footer from "@/components/footer";
 import Header from "@/components/header/header";
+import OnlineStatus from "@/lib/NetworkStatusWrapper";
 
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
-  
+
   variable: "--font-poppins",
 });
 
@@ -42,9 +43,10 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-              <Header/>
+              <Header />
+              <OnlineStatus />
               {children}
-              <Footer/>
+              <Footer />
               <Toaster position="top-center" reverseOrder={false} />
             </ThemeProvider>
           </SessionProvider>

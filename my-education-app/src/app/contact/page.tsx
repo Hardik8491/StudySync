@@ -7,7 +7,7 @@ import Link from 'next/link'
 
 import React from 'react'
 
-const Contect = () => {
+const Contact = () => {
   return (
     <div className="flex flex-col min-h-[100dvh]">
     <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-slate-900/10 to-stone-800/50">
@@ -135,4 +135,4 @@ const Contect = () => {
   )
 }
 
-export default Contect
+export default Contact

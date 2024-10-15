@@ -37,7 +37,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         </div>
         <nav className="flex flex-col gap-2">
           <Link
-            href="#"
+            href="/dashboard/students"
             className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground"
             prefetch={false}
           >
@@ -45,7 +45,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             Students
           </Link>
           <Link
-            href="#"
+            href="/dashboard/courses/"
             className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground"
             prefetch={false}
           >
@@ -53,7 +53,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             Courses
           </Link>
           <Link
-            href="#"
+            href="/dashboards/enrollments"
             className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground"
             prefetch={false}
           >
@@ -61,7 +61,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             Enrollments
           </Link>
           <Link
-            href="#"
+            href="/dashboards/reports"
             className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground"
             prefetch={false}
           >

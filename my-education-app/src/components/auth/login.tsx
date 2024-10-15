@@ -21,39 +21,41 @@ type Props = {
     setOpen: (open: boolean) => void;
 };
 
-const Login: FC<Props> = ({ setRoute,setOpen }) => {
+const Login: FC<Props> = ({ setRoute, setOpen }) => {
     const [show, setShow] = useState(false);
-     const [Login, { isError, data, isLoading, error, isSuccess }] =
-         useLoginMutation();
+    const [Login, { isError, data, isLoading, error, isSuccess }] = useLoginMutation();
+console.log("hdk eror",);
 
-     useEffect(() => {
-         if (isSuccess) {
+    useEffect(() => {
+        if (isSuccess) {
             setOpen(false);  
-             const message =
-                 data?.message ||
-                 "Login successful";
-             toast.success(message);
-           
-             setRoute("Home");
-         }
-         if (error) {
-             if ("data" in error) {
-                 const ErrorData = error as any;
-                 toast.error(ErrorData.data.message);
-             }
-         }
-     }, [data?.message, error, isSuccess, setOpen, setRoute]);
+            const message = data?.message || "Login successful";
+            toast.success(message);
+            setRoute("Home");
+        }
+        if (isError && error) {
+            if ("data" in error) {
+                const ErrorData = error as any;
+                toast.error(ErrorData.data?.message || "Login failed. Please try again.");
+            }
+        }
+    }, [data?.message, isError, error, isSuccess, setOpen, setRoute]);
 
     const formik = useFormik({
         initialValues: { email: "", password: "" },
         validationSchema: schema,
         onSubmit: async ({ email, password }) => {
-            const data={
+            const data = {
                 email,
                 password
             };
-            await Login(data);
-           
+            try {
+                await Login(data);
+            } catch (error) {
+                console.log("hdk eror",error);
+                
+                toast.error("An error occurred. Please try again.");
+            }
         },
     });
 
@@ -95,9 +97,7 @@ const Login: FC<Props> = ({ setRoute,setOpen }) => {
                         id='password'
                         placeholder='password!@%'
                         className={`${
-                            errors.password &&
-                            touched.password &&
-                            "border-red-500"
+                            errors.password && touched.password && "border-red-500"
                         } ${styles.input}`}
                     />
                     {!show ? (
@@ -134,7 +134,7 @@ const Login: FC<Props> = ({ setRoute,setOpen }) => {
                 <div className='flex item-center justify-center my-3'>
                     <FcGoogle size={30} className='cursor-pointer mr-2'
                     onClick={() => signIn("google")}
-                     />
+                    />
                     <AiFillGithub size={30} className='cursor-pointer mr-2'
                     onClick={() => signIn("github")}
                     />

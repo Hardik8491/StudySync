@@ -85,7 +85,7 @@ const Login = () => {
             <div className="flex items-center">
               <Label htmlFor="password">Password</Label>
               <Link
-                href="/forgot-password"
+                href="/auth/forgot-password"
                 className="ml-auto inline-block text-sm underline"
               >
                 Forgot your password?

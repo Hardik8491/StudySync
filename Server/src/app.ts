@@ -21,7 +21,7 @@ app.use(cookieParser());
 // cors
 app.use(
     cors({
-        origin:"https://study-sync-teal.vercel.app",
+        origin:"http://localhost:3000",
         credentials: true,
     })
 );

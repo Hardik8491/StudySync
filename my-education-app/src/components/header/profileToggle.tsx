@@ -124,6 +124,12 @@ const ProfileToggle = () => {
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
+            <Link href="/dashboard" className="flex items-center space-x-2">
+              <BookOpen className="h-4 w-4" />
+              <span>Dashboard</span>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
             <Link href="/support" className="flex items-center space-x-2">
               <HelpCircle className="h-4 w-4" />
               <span>Support</span>

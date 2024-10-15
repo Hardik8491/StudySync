@@ -6,10 +6,7 @@ import React from 'react'
 const Sidebar = () => {
   return (
     <aside className="hidden w-64 flex-col border-r bg-background p-6 lg:flex">
-    <div className="mb-6 flex items-center gap-2">
-      <BookIcon className="h-6 w-6 text-primary" />
-      <h1 className="text-xl font-bold">Edu Dashboard</h1>
-    </div>
+   
     <nav className="flex flex-col gap-2">
       <Collapsible className="grid gap-2">
         <CollapsibleTrigger className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground">
@@ -28,7 +25,7 @@ const Sidebar = () => {
               Users
             </Link>
             <Link
-              href="#"
+              href="/users"
               className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground"
               prefetch={false}
             >
@@ -55,7 +52,7 @@ const Sidebar = () => {
               Courses
             </Link>
             <Link
-              href="#"
+              href="/courses"
               className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground"
               prefetch={false}
             >

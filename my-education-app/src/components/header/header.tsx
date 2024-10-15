@@ -48,7 +48,8 @@ useEffect(() => {
 
   return (
     // <div>
-      <header className="sticky z-[99] top-0 w-full left-0 flex h-16 items-center gap-4 border-b bg-background bg-gradient-to-r from-slate-900/10 to-stone-800/50 px-4 md:px-6">
+     <header className="sticky z-[99] top-0 w-full left-0 flex h-16 items-center gap-4 border/40 dark:border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60  dark:bg-gradient-to-r shadow-sm from-slate-900/10 to-stone-800/50 px-4 md:px-6">
+        {/* <header className="sticky top-0 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"> */}
         <nav className="hidden flex-col gap-6 text-lg w-full font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
           <Link
             href="/"
@@ -70,19 +71,19 @@ useEffect(() => {
             Home
           </Link>
           <Link
-            href="#"
+            href="/courses"
             className="text-muted-foreground transition-colors hover:text-foreground"
           >
             Courses
           </Link>
           <Link
-            href="#"
+            href="/about"
             className="text-muted-foreground transition-colors hover:text-foreground"
           >
             About
           </Link>
           <Link
-            href="#"
+            href="/contact"
             className="text-muted-foreground  transition-colors hover:text-foreground"
           >
             Contact Us
