@@ -17,8 +17,8 @@ export const app = express();
 
 
 app.use(cors({
-    origin:'*', 
-    credentials:true, 
+  origin: 'https://study-sync-ten.vercel.app',
+  credentials: true, // Allow credentials (cookies, etc.)
   methods: ['POST'], // Specify allowed methods
 }));
 
