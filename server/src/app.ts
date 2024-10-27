@@ -12,13 +12,6 @@ import layoutRouter from "./routes/layout.router";
 
 // export app
 export const app = express();
-
-// body-parser
-app.use(express.json({ limit: "50mb" }));
-
-// cookie parser
-app.use(cookieParser());
-
 const allowedOrigins: string[] = [
     "http://localhost:3000",
     "https://study-sync-ten.vercel.app"
@@ -39,6 +32,13 @@ app.use(
     })
   );
   
+
+// body-parser
+app.use(express.json({ limit: "50mb" }));
+
+// cookie parser
+app.use(cookieParser());
+
 
 // testing route
 
