@@ -19,13 +19,26 @@ app.use(express.json({ limit: "50mb" }));
 // cookie parser
 app.use(cookieParser());
 
-// cors
+const allowedOrigins: string[] = [
+    "http://localhost:3000",
+    "https://study-sync-nabf.vercel.app"
+  ];
+  
+
 app.use(
     cors({
-        origin:"http://localhost:3000",
-        credentials: true,
+      origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+        if (allowedOrigins.indexOf(origin!) !== -1 || !origin) {
+          // Allow requests with no origin (like mobile apps or curl requests)
+          callback(null, true);
+        } else {
+          callback(new Error('Not allowed by CORS'));
+        }
+      },
+      credentials: true,
     })
-);
+  );
+  
 
 // testing route
 
