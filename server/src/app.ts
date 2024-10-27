@@ -21,7 +21,7 @@ app.use(cookieParser());
 
 const allowedOrigins: string[] = [
     "http://localhost:3000",
-    "https://study-sync-nabf.vercel.app"
+    "https://study-sync-ten.vercel.app"
   ];
   
 
