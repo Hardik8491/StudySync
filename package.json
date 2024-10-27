@@ -1,0 +1,14 @@
+{
+  "name": "study-sync",
+  "author": "Hardik (HDK) Bhammar",
+  "version": "2.1.2",
+  
+  "scripts": {
+    "start": "concurrently \"npm run start-client\" \"npm run start-server\"",
+    "start-client": "npm --prefix ./CLIENT run dev",
+    "start-server": "npm --prefix ./SERVER start"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
+}
