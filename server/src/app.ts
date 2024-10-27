@@ -22,7 +22,7 @@ export const app = express();
 app.use(express.json({ limit: "50mb" }));
 
 app.use(cors({
-    origin: 'https://study-sync-ten.vercel.app',
+    origin:[ 'https://study-sync-ten.vercel.app','http://localhost:3000'],
     credentials: true, // Allow credentials (cookies, etc.)
   }));
   
