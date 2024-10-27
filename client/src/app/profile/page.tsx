@@ -314,7 +314,7 @@ export default function Component() {
                             <Label htmlFor="role">Role</Label>
                             <div className="flex items-center space-x-2">
                               <Input id="role" name="role" value={account.role} disabled />
-                              {account.role === 'User' || "user" && (
+                              {account.role === 'User' && (
                                 <AlertDialog>
                                   
                                   <AlertDialogTrigger asChild>
