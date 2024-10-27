@@ -9,7 +9,7 @@ import orderRouter from "./routes/order.router";
 import notificationRoute from "./routes/notification.route";
 import analyticsRouter from "./routes/analytics.router";
 import layoutRouter from "./routes/layout.router";
-import stripeOrderRoute from "./routes/stripeOrder.router";
+
 // export app
 export const app = express();
 
@@ -46,7 +46,6 @@ app.use(
     notificationRoute,
     analyticsRouter,
     layoutRouter,
-    stripeOrderRoute
 );
 
 //unknown routes
