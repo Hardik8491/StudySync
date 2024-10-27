@@ -12,25 +12,16 @@ import layoutRouter from "./routes/layout.router";
 
 // export app
 export const app = express();
-const allowedOrigins: string[] = [
-    "http://localhost:3000",
-    "https://study-sync-ten.vercel.app"
-  ];
-  
 
-app.use(
-    cors({
-      origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
-        if (allowedOrigins.indexOf(origin!) !== -1 || !origin) {
-          // Allow requests with no origin (like mobile apps or curl requests)
-          callback(null, true);
-        } else {
-          callback(new Error('Not allowed by CORS'));
-        }
-      },
-      credentials: true,
-    })
-  );
+
+
+
+app.use(cors({
+  origin: 'https://study-sync-ten.vercel.app',
+  credentials: true, // Allow credentials (cookies, etc.)
+  methods: ['POST'], // Specify allowed methods
+}));
+
   
 
 // body-parser

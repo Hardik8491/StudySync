@@ -62,7 +62,7 @@ export const authApi = apiSlice.injectEndpoints({
             url: "/social-auth",
             method: "POST",
             body: data,
-            mode: 'no-cors',
+     
             credentials: "include" as const,
           }),
           async onQueryStarted(arg, { queryFulfilled, dispatch }) {
