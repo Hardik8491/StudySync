@@ -23,16 +23,16 @@ export const uploadCourse = CatchAsyncError(
  
      
       
-      // const thumbnail = data.thumbnail;
-      // if (thumbnail) {
-      //   const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
-      //     folder: "course",
-      //   });
-      //   data.thumbnail = {
-      //     public_id: myCloud.public_id,
-      //     url: myCloud.url,
-      //   };
-      // }
+      const thumbnail = data.thumbnail;
+      if (thumbnail) {
+        const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
+          folder: "course",
+        });
+        data.thumbnail = {
+          public_id: myCloud.public_id,
+          url: myCloud.url,
+        };
+      }
       createCourse(data, res, next);
     
     } catch (error: any) {

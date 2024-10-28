@@ -36,7 +36,12 @@ interface ICourseData extends Document {
     link: ILink[];
     suggestion: string;
     questions: IComment[];
-    //   review: IReview[];
+    // review: IReview[];
+}
+
+interface IInstructor {
+    name: string;
+    avatar: string;
 }
 
 export interface ICourse extends Document {
@@ -44,18 +49,21 @@ export interface ICourse extends Document {
     description: string;
     price: number;
     estimatedPrice?: number;
-    thumbnail: string;
+    thumbnail: {
+        public_id: string;
+        url: string;
+    };
     tag?: string;
     level: string;
     demoUrl: string;
-    benefits: {
-        title: string;
-    }[];
+    category: string;
+    benefits: { title: string }[];
     perquisites: { title: string }[];
     reviews: IReview[];
     courseData: ICourseData[];
     rating?: number;
     purchased?: number;
+    instructor: IInstructor;
 }
 
 const reviewSchema: Schema<IReview> = new Schema({
@@ -108,6 +116,11 @@ const courseSchema: Schema<ICourse> = new Schema(
         estimatedPrice: {
             type: Number,
         },
+        category:{
+            type: String,
+            required: true,
+        },
+        
         thumbnail: {
             public_id: {
                 type: String,
@@ -137,6 +150,7 @@ const courseSchema: Schema<ICourse> = new Schema(
                 title: String,
             },
         ],
+     
         reviews: [reviewSchema],
         courseData: [courseDataSchema],
         rating: {
@@ -146,6 +160,16 @@ const courseSchema: Schema<ICourse> = new Schema(
         purchased: {
             type: Number,
             default: 0,
+        },
+        instructor: {
+            name: {
+                type: String,
+                required: true,
+            },
+            avatar: {
+                type: String,
+                required: true,
+            },
         },
     },
     { timestamps: true }
