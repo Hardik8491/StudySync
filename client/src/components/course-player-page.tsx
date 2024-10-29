@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from 'react'
 import { Book, CheckCircle, Download, FileText, List, PlayCircle, Settings } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"

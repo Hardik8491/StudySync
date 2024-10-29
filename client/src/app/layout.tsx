@@ -39,7 +39,7 @@ export default function RootLayout({
                 bg-no-repeat dark:bg-gradient-to-b dark:from-gray-900 dark:to-black duration-300`}
       >
         <Provider>
-        <PersistGate loading={null} persistor={persistor}>
+        {/* <PersistGate loading={null} persistor={persistor}> */}
           <SessionProvider>
                   <ThemeProvider
               attribute="class"
@@ -57,7 +57,7 @@ export default function RootLayout({
          
 
           </SessionProvider>
-          </PersistGate>
+          {/* </PersistGate> */}
         </Provider>
       </body>
     </html>

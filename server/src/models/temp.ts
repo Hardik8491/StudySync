@@ -1,43 +1,90 @@
-import cloudinary from "cloudinary";
-import formidable from "formidable";
+import mongoose, { Document, Schema } from "mongoose";
 
-cloudinary.v2.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+// Define interfaces for features, lessons, and curriculum
+interface IFeature {
+  icon: string; // Assuming the icon is a string (URL or component name)
+  text: string;
+}
+
+interface ILesson {
+  title: string;
+  duration: string;
+}
+
+interface ICurriculumItem {
+  title: string;
+  lessons: ILesson[];
+}
+
+// Define the instructor interface
+interface IInstructor {
+  name: string;
+  title: string;
+  avatar: string; // URL for the instructor's avatar
+  courses: number;
+  students: number;
+  rating: number;
+}
+
+// Extend Document interface for Mongoose
+interface ICourse extends Document {
+  _id: string;
+  title: string;
+  description: string;
+  rating: number;
+  students: number;
+  lastUpdated: string;
+  language: string;
+  price: number;
+  discountPrice: number;
+  thumbnail: string; // URL for the course thumbnail
+  instructor: IInstructor;
+  features: IFeature[];
+  curriculum: ICurriculumItem[];
+}
+
+// Define the schema for the course
+const FeatureSchema = new Schema<IFeature>({
+  icon: { type: String, required: true },
+  text: { type: String, required: true },
 });
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+const LessonSchema = new Schema<ILesson>({
+  title: { type: String, required: true },
+  duration: { type: String, required: true },
+});
 
-export default async function handler(req, res) {
-  if (req.method === "POST") {
-    const form = new formidable.IncomingForm();
+const CurriculumItemSchema = new Schema<ICurriculumItem>({
+  title: { type: String, required: true },
+  lessons: { type: [LessonSchema], required: true },
+});
 
-    form.parse(req, async (err, fields, files) => {
-      if (err) {
-        return res.status(500).json({ error: "Form parsing error" });
-      }
+const InstructorSchema = new Schema<IInstructor>({
+  name: { type: String, required: true },
+  title: { type: String, required: true },
+  avatar: { type: String, required: true },
+  courses: { type: Number, required: true },
+  students: { type: Number, required: true },
+  rating: { type: Number, required: true },
+});
 
-      const file = files.thumbnail;
-      try {
-        const uploadResponse = await cloudinary.v2.uploader.upload(file.filepath, {
-          folder: "course",
-        });
+const CourseSchema = new Schema<ICourse>({
+  _id: { type: String, required: true },
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  rating: { type: Number, required: true },
+  students: { type: Number, required: true },
+  lastUpdated: { type: String, required: true },
+  language: { type: String, required: true },
+  price: { type: Number, required: true },
+  discountPrice: { type: Number, required: true },
+  thumbnail: { type: String, required: true },
+  instructor: { type: InstructorSchema, required: true },
+  features: { type: [FeatureSchema], required: true },
+  curriculum: { type: [CurriculumItemSchema], required: true },
+});
 
-        return res.status(200).json({
-          url: uploadResponse.secure_url,
-          public_id: uploadResponse.public_id,
-        });
-      } catch (uploadError) {
-        console.error("Upload error:", uploadError);
-        return res.status(500).json({ error: "Image upload failed" });
-      }
-    });
-  } else {
-    res.status(405).json({ error: "Method not allowed" });
-  }
-}
+// Create the Course model
+const CourseModel = mongoose.model<ICourse>("Course", CourseSchema);
+
+export default CourseModel;

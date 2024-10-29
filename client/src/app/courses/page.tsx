@@ -20,10 +20,11 @@ interface Instructor {
 
 interface Course {
   _id: string;
-  name: string;
+  title: string;
   description: string;
   duration: string;
   price: number;
+  estimatedPrice:number;
   thumbnail: { url: string };
   category: string;
   instructor: Instructor;
@@ -31,6 +32,49 @@ interface Course {
 
 const categories = ["All", "Web Development", "Data Science", "Cloud Computing", "Design"]
 
+function CourseCard({ course }:{course:Course}) {
+  return (
+    <Card key={course._id} className="overflow-hidden hover:shadow-xl transition-shadow duration-300">
+      <CardHeader className="p-0 relative">
+        <img src={course?.thumbnail?.url} alt={course?.title} className="w-full h-48 object-cover" />
+        <Badge className="absolute top-2 left-2 bg-primary text-primary-foreground">
+          {course?.category}
+        </Badge>
+      </CardHeader>
+      <CardContent className="p-4">
+        <h3 className="text-lg font-semibold mb-2 text-foreground line-clamp-1">{course?.title}</h3>
+        <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{course.description}</p>
+        <div className="flex items-center justify-between text-muted-foreground">
+          <div className="flex items-center space-x-2">
+            <Clock className="h-4 w-4" />
+            <span className="text-sm">{course?.duration || "4 months"}</span>
+          </div>
+          <div className="flex items-center space-x-2 text-primary">
+            <div className='flex items-center'>
+              <DollarSign className="h-4 w-4" />
+              <span className="text-sm line-through font-bold">{course?.price}</span>
+            </div>
+            <span className="text-lg font-bold">${course?.estimatedPrice}</span>
+          </div>
+        </div>
+      </CardContent>
+      <CardFooter className="p-4 bg-muted">
+        <div className="flex items-center justify-between w-full">
+          <div className="flex items-center space-x-2">
+            <Avatar>
+              <AvatarImage src={course?.instructor?.avatar} alt={course?.instructor?.name} />
+              <AvatarFallback>{course?.instructor?.name[0]}</AvatarFallback>
+            </Avatar>
+            <span className="text-sm font-medium text-foreground">{course?.instructor?.name}</span>
+          </div>
+          <Link href={`/courses/${course?._id}`}>
+            <Button size="sm">Learn Now</Button>
+          </Link>
+        </div>
+      </CardFooter>
+    </Card>
+  )
+}
 
 // Component
 export default function Courses() {
@@ -40,15 +84,6 @@ export default function Courses() {
   const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);  // State for filtered courses
 
   const { data, error, isLoading } = useGetAllCourseQuery();
-
-  if(isLoading) 
-    return <div><LoadingPage/></div>
-
-  if(error) 
-  return <div>Error: {error.message}</div>
-
-
-
   useEffect(() => {
     if (data) {
       setCourses(data?.course as Course[]); // Set courses state with fetched data
@@ -60,39 +95,45 @@ export default function Courses() {
   useEffect(() => {
     const coursesToDisplay = courses.filter(course =>
       (selectedCategory === "All" || course.category === selectedCategory) &&
-      course.name.toLowerCase().includes(searchTerm.toLowerCase())
+      course.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredCourses(coursesToDisplay);
   }, [courses, selectedCategory, searchTerm]);
 
+  if(isLoading) 
+    return <div><LoadingPage/></div>
+
+  if(error) 
+  return <div>Error: {error.message}</div>
+
   return (
-    <div className="bg-background min-h-screen p-8">
-      <div className="mx-4 space-y-12">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-foreground mb-4">Explore Our Courses</h1>
-          <p className="text-xl text-muted-foreground">Discover a world of knowledge and boost your skills</p>
+    <div className="min-h-screen bg-background p-4 sm:p-6 md:p-8">
+      <div className="max-w-7xl mx-auto space-y-8 sm:space-y-12">
+      <div className="text-center">
+          <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-2 sm:mb-4">Explore Our Courses</h1>
+          <p className="text-lg sm:text-xl text-muted-foreground">Discover a world of knowledge and boost your skills</p>
         </div>
         
         <Card>
-          <CardContent className="p-6">
-            <div className="grid gap-6 md:grid-cols-2">
+          <CardContent className="p-4 sm:p-6">
+            <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
               <div>
-                <label htmlFor="search" className="text-lg font-semibold text-foreground mb-2 block">Search Courses</label>
+                <label htmlFor="search" className="text-base sm:text-lg font-semibold text-foreground mb-2 block">Search Courses</label>
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                   <Input
                     id="search"
                     placeholder="Search courses..."
-                    className="pl-10 text-lg"
+                    className="pl-10 text-base sm:text-lg"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-foreground mb-2">Course Categories</h2>
+                <h2 className="text-base sm:text-lg font-semibold text-foreground mb-2">Course Categories</h2>
                 <div className="flex flex-wrap gap-2">
-                  {categories?.map(category => (
+                  {categories.map(category => (
                     <Button
                       key={category}
                       variant={selectedCategory === category ? "default" : "outline"}
@@ -109,48 +150,14 @@ export default function Courses() {
           </CardContent>
         </Card>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filteredCourses.map(course => (
-            <Card key={course?._id} className="overflow-hidden hover:shadow-xl transition-shadow duration-300">
-              <CardHeader className="p-0 relative">
-                <img src={course?.thumbnail?.url} alt={course?.name} className="w-full h-48 object-cover" />
-                <Badge className="absolute top-2 left-2 bg-primary text-primary-foreground">
-                  {course?.category}
-                </Badge>
-              </CardHeader>
-              <CardContent className="p-4">
-                <h3 className="text-lg font-semibold mb-2 text-foreground">{course?.name}</h3>
-                <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{course?.description}</p>
-                <div className="flex items-center justify-between text-muted-foreground">
-                  <div className="flex items-center space-x-2">
-                    <Clock className="h-4 w-4" />
-                    <span className="text-sm">{course?.duration}</span>
-                  </div>
-                  <div className="flex items-center space-x-2 text-primary">
-                    <DollarSign className="h-4 w-4" />
-                    <span className="text-lg font-bold">${course?.price}</span>
-                  </div>
-                </div>
-              </CardContent>
-              <CardFooter className="p-4 bg-muted">
-                <div className="flex items-center justify-between w-full">
-                  <div className="flex items-center space-x-2">
-                    <Avatar>
-                      <AvatarImage src={course?.instructor?.avatar} alt={course?.instructor?.name} />
-                      <AvatarFallback>{course?.instructor?.name[0]}</AvatarFallback>
-                    </Avatar>
-                    <span className="text-sm font-medium text-foreground">{course?.instructor?.name}</span>
-                  </div>
-                  <Link href={`/courses/${course._id}`}>
-                    <Button size="sm">Enroll Now</Button>
-                  </Link>
-                </div>
-              </CardFooter>
-            </Card>
+            <CourseCard key={course?._id} course={course} />
           ))}
         </div>
-        <Card className="bg-primary text-primary-foreground overflow-hidden">
-          <CardContent className="p-8">
+
+        <Card className="bg-primary/70 text-primary-foreground overflow-hidden">
+          <CardContent className="p-6">
             <div className="flex flex-col md:flex-row items-center">
               <div className="md:w-1/2 mb-6 md:mb-0">
                 <h2 className="text-3xl font-bold mb-4">Unlock Your Potential with Our Learning Platform</h2>
@@ -181,7 +188,7 @@ export default function Courses() {
               <div className="md:w-1/2 flex justify-center">
                 <div className="relative w-72 h-72">
                   <Image
-                    src="/placeholder.svg?height=288&width=288"
+                     src="/img.png"
                     alt="Learning illustration"
                     layout="fill"
                     objectFit="cover"
@@ -189,13 +196,13 @@ export default function Courses() {
                   />
                   <div className="absolute -top-4 -left-4">
                     <Avatar className="w-20 h-20 border-4 border-primary-foreground">
-                      <AvatarImage src="/placeholder.svg?height=80&width=80" alt="Student 1" />
+                    <AvatarImage src="/img.png" alt="Instructor 1" />
                       <AvatarFallback>S1</AvatarFallback>
                     </Avatar>
                   </div>
                   <div className="absolute -bottom-4 -right-4">
                     <Avatar className="w-20 h-20 border-4 border-primary-foreground">
-                      <AvatarImage src="/placeholder.svg?height=80&width=80" alt="Student 2" />
+                    <AvatarImage src="/img.png" alt="Instructor 2" />
                       <AvatarFallback>S2</AvatarFallback>
                     </Avatar>
                   </div>
@@ -205,43 +212,14 @@ export default function Courses() {
           </CardContent>
         </Card>
 
-        <div>
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-3xl font-bold text-foreground">Recommended for You</h2>
-            <Button variant="link" className="text-lg">See all courses</Button>
+           <div>
+          <div className="flex justify-between items-center mb-4 sm:mb-6">
+            <h2 className="text-2xl sm:text-3xl font-bold text-foreground">Recommended for You</h2>
+            <Button variant="link" className="text-base sm:text-lg">See all courses</Button>
           </div>
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {courses.map((course) => (
-              <Card key={course?.id} className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                <CardHeader className="p-0 relative">
-                  <img src={course?.image} alt={course?.title} className="w-full h-48 object-cover" />
-                  <Badge className="absolute top-2 right-2 bg-primary text-primary-foreground">
-                    {course?.category}
-                  </Badge>
-                </CardHeader>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold mb-2 text-foreground">{course?.title}</h3>
-                  <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{course.description}</p>
-                  <div className="flex items-center justify-between text-muted-foreground mb-4">
-                    <div className="flex items-center space-x-2">
-                      <Clock className="h-5 w-5" />
-                      <span className="text-sm font-medium">{course?.duration}</span>
-                    </div>
-                    <div className="flex items-center space-x-2 text-primary">
-                      <DollarSign className="h-5 w-5" />
-                      <span className="text-xl font-bold">${course?.price}</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2 mb-4">
-                    <Avatar>
-                      <AvatarImage src={course?.instructor?.avatar} alt={course?.instructor?.name} />
-                      <AvatarFallback>{course?.instructor?.name[0]}</AvatarFallback>
-                    </Avatar>
-                    <span className="text-sm font-medium text-foreground">{course?.instructor?.name}</span>
-                  </div>
-                  <Button className="w-full">Enroll Now</Button>
-                </CardContent>
-              </Card>
+              <CourseCard key={course?._id} course={course} />
             ))}
           </div>
         </div>

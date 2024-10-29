@@ -1,344 +1,451 @@
-// 'use client'
+'use client'
 
-// import { useState } from 'react'
-// import { Button } from "@/components/ui/button"
-// import { Input } from "@/components/ui/input"
-// import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-// import { Badge } from "@/components/ui/badge"
-// import { Search, BookOpen, Clock, DollarSign, ChevronRight, Star } from 'lucide-react'
-// import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-// import Image from 'next/image'
+import React, { useEffect, useRef, useState } from 'react'
+import { Book, CheckCircle, Download, FileText, List, PlayCircle, Settings } from 'lucide-react'
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Play, Pause, Volume2, VolumeX, Maximize, Minimize, SkipBack, SkipForward } from 'lucide-react'
+import { Progress } from "@/components/ui/progress"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Separator } from "@/components/ui/separator"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Slider } from '@/components/ui/slider'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+} from '@/components/ui/dropdown-menu'
+import { Toast } from "@/components/ui/toast"
 
-// const courses = [
-//   {
-//     id: 1,
-//     title: "AWS Certified Solutions Architect",
-//     image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-SCDlihzbHBKXshpUOPwRSwlgIarD7m.png",
-//     duration: "3 Month",
-//     description: "Master AWS architecture and pass the certification exam",
-//     instructor: {
-//       name: "Lina Chen",
-//       avatar: "/placeholder.svg?height=32&width=32"
-//     },
-//     category: "Cloud Computing",
-//     price: 80
-//   },
-//   {
-//     id: 2,
-//     title: "Full-Stack Web Development",
-//     image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-SCDlihzbHBKXshpUOPwRSwlgIarD7m.png",
-//     duration: "4 Month",
-//     description: "Learn to build modern web applications from front to back",
-//     instructor: {
-//       name: "Alex Johnson",
-//       avatar: "/placeholder.svg?height=32&width=32"
-//     },
-//     category: "Web Development",
-//     price: 95
-//   },
-//   {
-//     id: 3,
-//     title: "Machine Learning Fundamentals",
-//     image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-SCDlihzbHBKXshpUOPwRSwlgIarD7m.png",
-//     duration: "3 Month",
-//     description: "Dive into the world of AI and machine learning algorithms",
-//     instructor: {
-//       name: "Sarah Lee",
-//       avatar: "/placeholder.svg?height=32&width=32"
-//     },
-//     category: "Data Science",
-//     price: 85
-//   },
-//   {
-//     id: 4,
-//     title: "UX/UI Design Masterclass",
-//     image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-SCDlihzbHBKXshpUOPwRSwlgIarD7m.png",
-//     duration: "2 Month",
-//     description: "Create stunning user interfaces and enhance user experiences",
-//     instructor: {
-//       name: "Emma Davis",
-//       avatar: "/placeholder.svg?height=32&width=32"
-//     },
-//     category: "Design",
-//     price: 70
-//   }
-// ]
+type Quality = '360p' | '480p' | '720p' | '1080p'
 
-// const categories = ["All", "Web Development", "Data Science", "Cloud Computing", "Design"]
-
-// export default function Component() {
-//   const [selectedCategory, setSelectedCategory] = useState("All")
-//   const [searchTerm, setSearchTerm] = useState("")
-
-//   const filteredCourses = courses.filter(course =>
-//     (selectedCategory === "All" || course.category === selectedCategory) &&
-//     course.title.toLowerCase().includes(searchTerm.toLowerCase())
-//   )
-
-//   return (
-//     <div className="min-h-screen bg-background p-8">
-//       <div className="max-w-7xl mx-auto space-y-12">
-//         <div className="text-center">
-//           <h1 className="text-4xl font-bold text-foreground mb-4">Explore Our Courses</h1>
-//           <p className="text-xl text-muted-foreground">Discover a world of knowledge and boost your skills</p>
-//         </div>
-
-//         <Card>
-//           <CardContent className="p-6">
-//             <div className="grid gap-6 md:grid-cols-2">
-//               <div>
-//                 <label htmlFor="search" className="text-lg font-semibold text-foreground mb-2 block">Search Courses</label>
-//                 <div className="relative">
-//                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-//                   <Input
-//                     id="search"
-//                     placeholder="Search courses..."
-//                     className="pl-10 text-lg"
-//                     value={searchTerm}
-//                     onChange={(e) => setSearchTerm(e.target.value)}
-//                   />
-//                 </div>
-//               </div>
-//               <div>
-//                 <h2 className="text-lg font-semibold text-foreground mb-2">Course Categories</h2>
-//                 <div className="flex flex-wrap gap-2">
-//                   {categories.map(category => (
-//                     <Button
-//                       key={category}
-//                       variant={selectedCategory === category ? "default" : "outline"}
-//                       size="lg"
-//                       onClick={() => setSelectedCategory(category)}
-//                       className="transition-colors duration-200"
-//                     >
-//                       {category}
-//                     </Button>
-//                   ))}
-//                 </div>
-//               </div>
-//             </div>
-//           </CardContent>
-//         </Card>
-
-//         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-//           {filteredCourses.map(course => (
-//             <Card key={course.id} className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
-//               <CardHeader className="p-0 relative">
-//                 <img src={course.image} alt={course.title} className="w-full h-48 object-cover" />
-//                 <Badge className="absolute top-2 right-2 bg-primary text-primary-foreground">
-//                   {course.category}
-//                 </Badge>
-//               </CardHeader>
-//               <CardContent className="p-6">
-//                 <h3 className="text-xl font-bold mb-2 text-foreground">{course.title}</h3>
-//                 <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{course.description}</p>
-//                 <div className="flex items-center justify-between text-muted-foreground mb-4">
-//                   <div className="flex items-center space-x-2">
-//                     <Clock className="h-5 w-5" />
-//                     <span className="text-sm font-medium">{course.duration}</span>
-//                   </div>
-//                   <div className="flex items-center space-x-2 text-primary">
-//                     <DollarSign className="h-5 w-5" />
-//                     <span className="text-xl font-bold">${course.price}</span>
-//                   </div>
-//                 </div>
-//                 <div className="flex items-center space-x-2 mb-4">
-//                   <Avatar>
-//                     <AvatarImage src={course.instructor.avatar} alt={course.instructor.name} />
-//                     <AvatarFallback>{course.instructor.name[0]}</AvatarFallback>
-//                   </Avatar>
-//                   <span className="text-sm font-medium text-foreground">{course.instructor.name}</span>
-//                 </div>
-//                 <Button className="w-full">Enroll Now</Button>
-//               </CardContent>
-//             </Card>
-//           ))}
-//         </div>
-
-//         <Card className="bg-primary text-primary-foreground overflow-hidden">
-//           <CardContent className="p-8">
-//             <div className="flex flex-col md:flex-row items-center">
-//               <div className="md:w-1/2 mb-6 md:mb-0">
-//                 <h2 className="text-3xl font-bold mb-4">Unlock Your Potential with Our Learning Platform</h2>
-//                 <ul className="space-y-4 mb-6">
-//                   <li className="flex items-center">
-//                     <div className="w-6 h-6 bg-primary-foreground rounded-full mr-3 flex items-center justify-center">
-//                       <BookOpen className="h-4 w-4 text-primary" />
-//                     </div>
-//                     <span className="text-lg">Free E-books, videos & consultations</span>
-//                   </li>
-//                   <li className="flex items-center">
-//                     <div className="w-6 h-6 bg-primary-foreground rounded-full mr-3 flex items-center justify-center">
-//                       <Star className="h-4 w-4 text-primary" />
-//                     </div>
-//                     <span className="text-lg">World-class instructors</span>
-//                   </li>
-//                   <li className="flex items-center">
-//                     <div className="w-6 h-6 bg-primary-foreground rounded-full mr-3 flex items-center justify-center">
-//                       <ChevronRight className="h-4 w-4 text-primary" />
-//                     </div>
-//                     <span className="text-lg">Cutting-edge course content</span>
-//                   </li>
-//                 </ul>
-//                 <Button variant="secondary" size="lg" className="text-lg px-6 py-3">
-//                   Start Learning Now
-//                 </Button>
-//               </div>
-//               <div className="md:w-1/2 flex justify-center">
-//                 <div className="relative w-72 h-72">
-//                   <Image
-//                     src="/placeholder.svg?height=288&width=288"
-//                     alt="Learning illustration"
-//                     layout="fill"
-//                     objectFit="cover"
-//                     className="rounded-full"
-//                   />
-//                   <div className="absolute -top-4 -left-4">
-//                     <Avatar className="w-20 h-20 border-4 border-primary-foreground">
-//                       <AvatarImage src="/placeholder.svg?height=80&width=80" alt="Student 1" />
-//                       <AvatarFallback>S1</AvatarFallback>
-//                     </Avatar>
-//                   </div>
-//                   <div className="absolute -bottom-4 -right-4">
-//                     <Avatar className="w-20 h-20 border-4 border-primary-foreground">
-//                       <AvatarImage src="/placeholder.svg?height=80&width=80" alt="Student 2" />
-//                       <AvatarFallback>S2</AvatarFallback>
-//                     </Avatar>
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-//           </CardContent>
-//         </Card>
-
-//         <div>
-//           <div className="flex justify-between items-center mb-6">
-//             <h2 className="text-3xl font-bold text-foreground">Recommended for You</h2>
-//             <Button variant="link" className="text-lg">See all courses</Button>
-//           </div>
-//           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-//             {courses.map((course) => (
-//               <Card key={course.id} className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
-//                 <CardHeader className="p-0 relative">
-//                   <img src={course.image} alt={course.title} className="w-full h-48 object-cover" />
-//                   <Badge className="absolute top-2 right-2 bg-primary text-primary-foreground">
-//                     {course.category}
-//                   </Badge>
-//                 </CardHeader>
-//                 <CardContent className="p-6">
-//                   <h3 className="text-xl font-bold mb-2 text-foreground">{course.title}</h3>
-//                   <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{course.description}</p>
-//                   <div className="flex items-center justify-between text-muted-foreground mb-4">
-//                     <div className="flex items-center space-x-2">
-//                       <Clock className="h-5 w-5" />
-//                       <span className="text-sm font-medium">{course.duration}</span>
-//                     </div>
-//                     <div className="flex items-center space-x-2 text-primary">
-//                       <DollarSign className="h-5 w-5" />
-//                       <span className="text-xl font-bold">${course.price}</span>
-//                     </div>
-//                   </div>
-//                   <div className="flex items-center space-x-2 mb-4">
-//                     <Avatar>
-//                       <AvatarImage src={course.instructor.avatar} alt={course.instructor.name} />
-//                       <AvatarFallback>{course.instructor.name[0]}</AvatarFallback>
-//                     </Avatar>
-//                     <span className="text-sm font-medium text-foreground">{course.instructor.name}</span>
-//                   </div>
-//                   <Button className="w-full">Enroll Now</Button>
-//                 </CardContent>
-//               </Card>
-//             ))}
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   )
-// }
-"use client";
-import { useState } from "react";
-import Image from "next/image";
-import { Card, CardContent } from "@/components/ui/card";
-import { Upload } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-
-// Define types for CourseInfo state
-interface CourseInfo {
-  thumbnail: string;
-  preview: any;
+const videoSources: Record<Quality, string> = {
+  '360p': '/ex.mp4',
+  '480p': 'https://example.com/video-480p.mp4',
+  '720p': 'https://example.com/video-720p.mp4',
+  '1080p': 'https://example.com/video-1080p.mp4',
 }
 
-const CourseThumbnailUpload: React.FC = () => {
-  const [courseInfo, setCourseInfo] = useState<CourseInfo>({
-    thumbnail: "",
-    preview: "",
-  });
-  const [isUploading, setIsUploading] = useState<boolean>(false);
+export default function CoursePlayerPage() {
+  const [currentLesson, setCurrentLesson] = useState(0)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [volume, setVolume] = useState(1)
+  const [currentTime, setCurrentTime] = useState(0)
+  const [duration, setDuration] = useState(0)
+  const [isFullscreen, setIsFullscreen] = useState(false)
+  const [playbackSpeed, setPlaybackSpeed] = useState(1)
+  const [captionsEnabled, setCaptionsEnabled] = useState(false)
+  const [quality, setQuality] = useState<Quality>('720p')
+  const [showToast, setShowToast] = useState(false)
+  const [toastMessage, setToastMessage] = useState('')
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const playerRef = useRef<HTMLDivElement>(null)
 
-  console.log("courseInfo", courseInfo.thumbnail);
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
 
-  // Handle file input change for preview and upload
-  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
+    const updateTime = () => setCurrentTime(video.currentTime)
+    const updateDuration = () => setDuration(video.duration)
 
-      // Preview image
-      const fileReader = new FileReader();
-      fileReader.onload = async () => {
-        if (fileReader.readyState === 2 && typeof fileReader.result === "string") {
-          setCourseInfo((prev) => ({
-            ...prev,
-            preview: fileReader.result,
-          }));
+    video.addEventListener('timeupdate', updateTime)
+    video.addEventListener('loadedmetadata', updateDuration)
 
-          courseInfo.thumbnail = fileReader.result;
-       
-        
-        }
-      };
-      fileReader.readAsDataURL(file); // Reads file as Base64
+    return () => {
+      video.removeEventListener('timeupdate', updateTime)
+      video.removeEventListener('loadedmetadata', updateDuration)
     }
-  };
+  }, [])
+
+  const togglePlay = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause()
+      } else {
+        videoRef.current.play()
+      }
+      setIsPlaying(!isPlaying)
+    }
+  }
+
+  const handleVolumeChange = (newVolume: number[]) => {
+    const volumeValue = newVolume[0]
+    setVolume(volumeValue)
+    if (videoRef.current) {
+      videoRef.current.volume = volumeValue
+    }
+  }
+
+  const handleProgressChange = (newTime: number[]) => {
+    const timeValue = newTime[0]
+    setCurrentTime(timeValue)
+    if (videoRef.current) {
+      videoRef.current.currentTime = timeValue
+    }
+  }
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      playerRef.current?.requestFullscreen()
+      setIsFullscreen(true)
+    } else {
+      document.exitFullscreen()
+      setIsFullscreen(false)
+    }
+  }
+
+  const formatTime = (time: number) => {
+    const minutes = Math.floor(time / 60)
+    const seconds = Math.floor(time % 60)
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`
+  }
+
+  const changePlaybackSpeed = (speed: number) => {
+    setPlaybackSpeed(speed)
+    if (videoRef.current) {
+      videoRef.current.playbackRate = speed
+    }
+    showToastMessage(`Playback speed set to ${speed}x`)
+  }
+
+  const toggleCaptions = () => {
+    setCaptionsEnabled(!captionsEnabled)
+    if (videoRef.current) {
+      const track = videoRef.current.textTracks[0]
+      if (track) {
+        track.mode = captionsEnabled ? 'hidden' : 'showing'
+      }
+    }
+    showToastMessage(captionsEnabled ? 'Captions disabled' : 'Captions enabled')
+  }
+
+  const changeQuality = (newQuality: Quality) => {
+    if (videoRef.current) {
+      const currentTime = videoRef.current.currentTime
+      setQuality(newQuality)
+      videoRef.current.src = videoSources[newQuality]
+      videoRef.current.currentTime = currentTime
+      if (isPlaying) {
+        videoRef.current.play()
+      }
+    }
+    showToastMessage(`Quality changed to ${newQuality}`)
+  }
+
+  const showToastMessage = (message: string) => {
+    setToastMessage(message)
+    setShowToast(true)
+    setTimeout(() => setShowToast(false), 3000)
+  }
+
+  const skipForward = () => {
+    if (videoRef.current) {
+      videoRef.current.currentTime += 10
+    }
+  }
+
+  const skipBackward = () => {
+    if (videoRef.current) {
+      videoRef.current.currentTime -= 10
+    }
+  }
+
+  // In a real application, this data would come from an API or database
+  const course = {
+    title: "Advanced React Patterns and Best Practices",
+    progress: 35,
+    instructor: {
+      name: "Jane Doe",
+      avatar: "/placeholder.svg?height=100&width=100",
+    },
+    curriculum: [
+      {
+        title: "Introduction to Advanced React",
+        lessons: [
+          { id: 0, title: "Course Overview", duration: "5:00", completed: true },
+          { id: 1, title: "Setting Up the Development Environment", duration: "15:00", completed: true },
+        ],
+      },
+      {
+        title: "Higher-Order Components (HOCs)",
+        lessons: [
+          { id: 2, title: "Understanding HOCs", duration: "20:00", completed: false },
+          { id: 3, title: "Implementing HOCs", duration: "30:00", completed: false },
+          { id: 4, title: "HOC Best Practices", duration: "25:00", completed: false },
+        ],
+      },
+      {
+        title: "Render Props Pattern",
+        lessons: [
+          { id: 5, title: "Introduction to Render Props", duration: "15:00", completed: false },
+          { id: 6, title: "Creating Reusable Components with Render Props", duration: "35:00", completed: false },
+        ],
+      },
+    ],
+    materials: [
+      { title: "Course Slides", type: "PDF", size: "2.5 MB" },
+      { title: "Example Code", type: "ZIP", size: "1.8 MB" },
+      { title: "Additional Resources", type: "PDF", size: "500 KB" },
+    ],
+  }
+
+  const currentLessonData = course.curriculum
+    .flatMap(section => section.lessons)
+    .find(lesson => lesson.id === currentLesson)
 
   return (
-    <div className="space-y-4">
-      <Label htmlFor="thumbnail" className="text-sm font-medium">
-        Course Thumbnail
-      </Label>
-      <Card className="overflow-hidden">
-        <CardContent className="p-4">
-          {courseInfo.preview ? (
-            <Image
-              src={courseInfo.preview}
-              alt="Course thumbnail preview"
-              width={300}
-              height={200}
-              className="w-full h-[200px] object-cover rounded-md"
-            />
-          ) : (
-            <div className="w-full h-[200px] bg-muted flex items-center justify-center rounded-md">
-              <Upload className="w-12 h-12 text-muted-foreground" />
+    <div className="container mx-auto px-4 py-8">
+      <div className="grid gap-8 md:grid-cols-3">
+        <div className="md:col-span-2">
+          <Card className="mb-8">
+            <CardContent className="p-0">
+              <div className="aspect-video bg-black">
+                <div ref={playerRef} className="relative w-full max-w-full mx-auto bg-gray-900 rounded overflow-hidden">
+                  <video
+                    ref={videoRef}
+                    className="w-full h-auto"
+                    src={videoSources[quality]}
+                  >
+                    <track
+                      kind="captions"
+                      src="/path-to-your-captions.vtt"
+                      srcLang="en"
+                      label="English"
+                    />
+                  </video>
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                    <Slider
+                      value={[currentTime]}
+                      min={0}
+                      max={duration}
+                      step={1}
+                      onValueChange={handleProgressChange}
+                      className="w-full mb-4"
+                    />
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-4">
+                        <Button variant="ghost" size="icon" onClick={skipBackward}>
+                          <SkipBack className="h-6 w-6" />
+                        </Button>
+                        <Button variant="ghost" size="icon" onClick={togglePlay}>
+                          {isPlaying ? <Pause className="h-6 w-6" /> : <Play className="h-6 w-6" />}
+                        </Button>
+                        <Button variant="ghost" size="icon" onClick={skipForward}>
+                          <SkipForward className="h-6 w-6" />
+                        </Button>
+                        <div className="flex items-center space-x-2">
+                          <Button variant="ghost" size="icon" onClick={() => handleVolumeChange([volume === 0 ? 1 : 0])}>
+                            {volume === 0 ? <VolumeX className="h-6 w-6" /> : <Volume2 className="h-6 w-6" />}
+                          </Button>
+                          <Slider
+                            value={[volume]}
+                            min={0}
+                            max={1}
+                            step={0.1}
+                            onValueChange={handleVolumeChange}
+                            className="w-24"
+                          />
+                        </div>
+                        <div className="text-white text-sm">
+                          {formatTime(currentTime)} / {formatTime(duration)}
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <Settings className="h-6 w-6" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent>
+                            <DropdownMenuLabel>Settings</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuSub>
+                              <DropdownMenuSubTrigger>Quality</DropdownMenuSubTrigger>
+                              <DropdownMenuSubContent>
+                                {Object.keys(videoSources).map((q) => (
+                                  <DropdownMenuItem key={q} onClick={() => changeQuality(q as Quality)}>
+                                    {q} {q === quality && '✓'}
+                                  </DropdownMenuItem>
+                                ))}
+                              </DropdownMenuSubContent>
+                            </DropdownMenuSub>
+                            <DropdownMenuSub>
+                              <DropdownMenuSubTrigger>Playback Speed</DropdownMenuSubTrigger>
+                              <DropdownMenuSubContent>
+                                {[0.5, 0.75, 1, 1.25, 1.5, 2].map((speed) => (
+                                  <DropdownMenuItem key={speed} onClick={() => changePlaybackSpeed(speed)}>
+                                    {speed}x {speed === playbackSpeed && '✓'}
+                                  </DropdownMenuItem>
+                                ))}
+                              </DropdownMenuSubContent>
+                            </DropdownMenuSub>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem onClick={toggleCaptions}>
+                              {captionsEnabled ? 'Disable' : 'Enable'} Captions
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                        <Button variant="ghost" size="icon" onClick={toggleFullscreen}>
+                          {isFullscreen ? <Minimize className="h-6 w-6" /> : <Maximize className="h-6 w-6" />}
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          <div className="mb-8">
+            <h1 className="text-2xl font-bold mb-2">{currentLessonData?.title}</h1>
+            <div className="flex items-center space-x-4">
+              <Avatar className="w-8 h-8">
+                <AvatarImage src={course.instructor.avatar} alt={course.instructor.name} />
+                <AvatarFallback>{course.instructor.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+              </Avatar>
+              <span className="text-muted-foreground">{course.instructor.name}</span>
             </div>
-          )}
+          </div>
+          <Tabs defaultValue="overview">
+            <TabsList>
+              <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="notes">Notes</TabsTrigger>
+              <TabsTrigger value="discussions">Discussions</TabsTrigger>
+            </TabsList>
+            <TabsContent value="overview">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Lesson Overview</CardTitle>
+                  <CardDescription>Key points and summary of the current lesson</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p>This lesson covers the fundamental concepts of the current topic. You&apos;ll learn about the key principles, best practices, and how to apply them in real-world scenarios.</p>
+                  <h3 className="font-semibold mt-4 mb-2">Learning Objectives:</h3>
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>Understand the core concepts of the topic</li>
+                    <li>Learn how to implement the patterns in your own projects</li>
+                    <li>Recognize common pitfalls and how to  avoid them</li>
+                    <li>Apply best practices for optimal performance and maintainability</li>
+                  </ul>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="notes">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Your Notes</CardTitle>
+                  <CardDescription>Take notes for this lesson</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <textarea
+                    className="w-full h-64 p-2 border rounded-md"
+                    placeholder="Start typing your notes here..."
+                  ></textarea>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="discussions">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Lesson Discussions</CardTitle>
+                  <CardDescription>Engage with your peers and instructors</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p>Discussion forum placeholder. In a real application, this would be populated with comments and discussions related to the current lesson.</p>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </div>
+        <div>
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle>Course Progress</CardTitle>
+              <CardDescription>{course.progress}% Complete</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Progress value={course.progress} className="mb-2" />
+              <p className="text-sm text-muted-foreground">
+                {course.curriculum.flatMap(s => s.lessons).filter(l => l.completed).length} of {course.curriculum.flatMap(s => s.lessons).length} lessons completed
+              </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Course Content</CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <ScrollArea className="h-[400px]">
+                {course.curriculum.map((section, sectionIndex) => (
+                  <div key={sectionIndex}>
+                    <div className="p-4 bg-muted">
+                      <h3 className="font-semibold">{section.title}</h3>
+                    </div>
+                    <ul>
+                      {section.lessons.map((lesson) => (
+                        <li key={lesson.id} className="border-b last:border-b-0">
+                          <button
+                            className={`flex items-center justify-between w-full p-4 text-left hover:bg-muted/50 ${currentLesson === lesson.id ? 'bg-muted' : ''}`}
+                            onClick={() => setCurrentLesson(lesson.id)}
+                          >
+                            <div className="flex items-center">
+                              {lesson.completed ? (
+                                <CheckCircle className="w-5 h-5 mr-2 text-green-500" />
+                              ) : (
+                                <PlayCircle className="w-5 h-5 mr-2 text-primary" />
+                              )}
+                              <span>{lesson.title}</span>
+                            </div>
+                            <span className="text-muted-foreground">{lesson.duration}</span>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </ScrollArea>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+      <Card className="mt-8">
+        <CardHeader>
+          <CardTitle>Course Materials</CardTitle>
+          <CardDescription>Download additional resources for this course</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ul className="space-y-2">
+            {course.materials.map((material, index) => (
+              <li key={index} className="flex items-center justify-between p-2 hover:bg-muted rounded-md">
+                <div className="flex items-center">
+                  <FileText className="w-5 h-5 mr-2 text-primary" />
+                  <span>{material.title}</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Badge variant="secondary">{material.type}</Badge>
+                  <span className="text-sm text-muted-foreground">{material.size}</span>
+                  <Button size="sm" variant="ghost">
+                    <Download className="w-4 h-4" />
+                  </Button>
+                </div>
+              </li>
+            ))}
+          </ul>
         </CardContent>
       </Card>
-      <div className="relative">
-        <Upload className="absolute left-3 top-1/2 transform h-4 w-4 -translate-y-1/2 text-gray-400" />
-        <Input
-          id="thumbnail"
-          name="thumbnail"
-          type="file"
-          onChange={handleInputChange}
-          accept="image/*"
-          className="w-full cursor-pointer pl-10"
-          disabled={isUploading}
-        />
-      </div>
-      <p className="text-sm text-muted-foreground">
-        Upload a thumbnail image for your course. Recommended size: 300x200 pixels.
-      </p>
+      {/* {showToast && (
+        <Toast className="fixed bottom-4 right-4 bg-primary text-primary-foreground">
+          {toastMessage}
+        </Toast>
+      )} */}
     </div>
-  );
-};
-
-export default CourseThumbnailUpload;
+  )
+}

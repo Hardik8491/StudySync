@@ -1,13 +1,106 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Order Confirmation - StudySync</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background-color: #2ecc71;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .logo {
+            max-width: 150px;
+            margin-bottom: 10px;
+        }
+        .order-details {
+            padding: 20px;
+        }
+        .order-summary {
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #2ecc71;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .footer {
+            background-color: #27ae60;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 0.8em;
+        }
+        .social-icons {
+            margin-top: 10px;
+        }
+        .social-icons a {
+            display: inline-block;
+            margin: 0 10px;
+            color: white;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
-    
+    <div class="container">
+        <div class="header">
+            <img src="https://public.blob.vercel-storage.com/eEZHAoPTOBSYGBE/studysync-logo-white-6oup3lXCOhTDkIBwTFxiVrUuF6kZgJ.png" alt="StudySync Logo" class="logo">
+            <h1>Order Confirmation</h1>
+        </div>
+        <div class="order-details">
+            <h2>Thank you for your order, <%= order.name %>!</h2>
+            <p>We're thrilled to confirm your course purchase. Get ready to embark on an exciting learning journey!</p>
+            
+            <div class="order-summary">
+                <h3>Order Summary</h3>
+                <ul>
+                    <li><strong>Order ID:</strong> <%= order._id %></li>
+                    <li><strong>Course:</strong> <%= order.name %></li>
+                    <li><strong>Price:</strong> $<%= order.price %></li>
+                    <li><strong>Order Date:</strong> <%= order.data %></li>
+                </ul>
+            </div>
+            
+            <p>You can access your course by clicking the button below:</p>
+            <a href="https://study-sync-ten.vercel.app/my-courses" class="btn">Start Learning Now</a>
+            
+            <p>If you have any questions or need assistance, our support team is here to help!</p>
+            <a href="mailto:hardikbhammar8040@.com" class="btn" style="background-color: #27ae60;">Contact Support</a>
+        </div>
+        <div class="footer">
+            <p>&copy; 2024 StudySync. All rights reserved.</p>
+            <div class="social-icons">
+                <a href="https://facebook.com/studysync">Facebook</a>
+                <a href="https://twitter.com/studysync">Twitter</a>
+                <a href="https://instagram.com/studysync">Instagram</a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

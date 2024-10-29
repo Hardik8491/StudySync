@@ -16,6 +16,7 @@ import { IOrder } from "../models/order.model";
 import { getAllOrderService, newOrder } from "../services/order.service";
 import NotificationModel from "../models/notification.model";
 import Stripe from "stripe";
+import { idText } from "typescript";
 dotenv.config();
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -33,7 +34,7 @@ interface Item {
 
 interface Course {
   _id: string;
-  name: string;
+  title: string;
   price: number;
   purchased?: number;
 }
@@ -49,7 +50,6 @@ export const createOrder = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { items } = req.body as { items: Item[] };
-      console.log(items);
 
       const userId = req.user?._id as string;
 
@@ -57,38 +57,48 @@ export const createOrder = CatchAsyncError(
       if (!user) {
         return next(new ErrorHandler("User not found", 404));
       }
-      // [ { id: '66c1f75b12c1e3e759a9afd6', price: 99.99 } ]
+
       const courseIds: string[] = items.map((item: Item) => item.id);
-      
+
+  
 
       const purchasedCourses = user.courses.map((course) =>
         course._id.toString()
       );
+  
 
-      // const alreadyPurchasedCourses= courseIds.filter(courseId => purchasedCourses.includes(courseId.id));
-      // if (alreadyPurchasedCourses.length > 0) {
-      //     return next(new ErrorHandler(`You have already purchased the following courses: ${alreadyPurchasedCourses.join(', ')}`, 400));
-      // }
+      const alreadyPurchasedCourses = courseIds.filter((courseId) =>
+        purchasedCourses.includes(courseId)
+      );
+      if (alreadyPurchasedCourses.length > 0) {
+        return next(
+          new ErrorHandler(
+            `You have already purchased the following courses: ${alreadyPurchasedCourses.join(
+              ", "
+            )}`,
+            400
+          )
+        );
+      }
+      console.log("c", courseIds);
 
       const courses = (await CourseModel.find({
         _id: { $in: courseIds },
       })) as Course[];
-     ;
+  
 
-      // if (courses.length !== courseIds.length) {
-      //     return next(new ErrorHandler("One or more courses not found", 404));
-      // }
+      if (courses.length !== courseIds.length) {
+        return next(new ErrorHandler("One or more courses not found", 404));
+      }
 
       const lineItems = courses.map((item) => ({
         price_data: {
           currency: "inr",
-          product_data: { name: item.name },
+          product_data: { name: item.title },
           unit_amount: item.price * 100,
         },
         quantity: 1,
       }));
-
-     
 
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
@@ -106,14 +116,13 @@ export const createOrder = CatchAsyncError(
         courseIds,
         payment_info: session.id,
       };
-   
 
       const mailData = courses.map((course) => ({
         order: {
           _id: course._id.toString().slice(0, 6),
-          name: course.name,
+          name: course.title,
           price: course.price,
-          data: new Date().toLocaleDateString("en-US", {
+          date: new Date().toLocaleDateString("en-US", {
             year: "numeric",
             month: "long",
             day: "numeric",
@@ -127,8 +136,6 @@ export const createOrder = CatchAsyncError(
           { order: courseMailData }
         );
         console.log(html);
-        
-
 
         try {
           const res=await sendMailer({
@@ -137,7 +144,7 @@ export const createOrder = CatchAsyncError(
             template: "order-confirm.ejs",
             data: courseMailData,
           });
- 
+
         } catch (error) {
           return next(new ErrorHandler((error as Error).message, 500));
         }
@@ -162,11 +169,12 @@ export const createOrder = CatchAsyncError(
         user: userId,
         title: "New Order",
         message: `You have a new order for ${courses
-          .map((course) => course.name)
+          .map((course) => course.title)
           .join(", ")}`,
       });
 
       newOrder(session, data, res, next);
+     
     } catch (error) {
       return next(new ErrorHandler((error as Error).message, 500));
     }

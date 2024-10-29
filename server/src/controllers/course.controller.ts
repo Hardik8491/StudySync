@@ -21,9 +21,12 @@ export const uploadCourse = CatchAsyncError(
     try {
       const data = req.body;
  
+     console.log(data);
      
       
       const thumbnail = data.thumbnail;
+      console.log(thumbnail);
+      
       if (thumbnail) {
         const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
           folder: "course",
@@ -32,9 +35,14 @@ export const uploadCourse = CatchAsyncError(
           public_id: myCloud.public_id,
           url: myCloud.url,
         };
+        console.log(myCloud.url);
+        
+      }else{
+        return next(new ErrorHandler("Please upload thumbnail", 400));
       }
-      createCourse(data, res, next);
-    
+      
+     await createCourse(data, res, next);
+   
     } catch (error: any) {
    
       
@@ -104,6 +112,8 @@ export const getAllCourses = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const isCached = await redisClient.get("allCourses");
+
+      
       if (isCached) {
         const course = JSON.parse(isCached);
         res.status(200).json({ success: true, course });

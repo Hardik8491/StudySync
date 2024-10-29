@@ -113,9 +113,9 @@ const ProfileToggle = () => {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <Link href="/profile" className="flex items-center space-x-2">
+            <Link href="/account" className="flex items-center space-x-2">
               <User className="h-4 w-4" />
-              <span>Profile</span>
+              <span>My Account</span>
             </Link>
           </DropdownMenuItem>
           {user.isAdmin && (
@@ -127,7 +127,7 @@ const ProfileToggle = () => {
             </DropdownMenuItem>
           )}
           <DropdownMenuItem>
-            <Link href="/courses" className="flex items-center space-x-2">
+            <Link href="/account/courses" className="flex items-center space-x-2">
               <BookOpen className="h-4 w-4" />
               <span>Courses</span>
             </Link>

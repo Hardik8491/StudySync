@@ -17,6 +17,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import toast from 'react-hot-toast'
 import { useCreateCourseMutation } from '@/redux-toolkit/features/courses/courseApi'
 import Image from 'next/image'
+import { useSelector } from 'react-redux'
 // Define types for CourseInfo state
 interface CourseInfo {
   name:string;
@@ -28,7 +29,7 @@ interface CourseInfo {
   category: string;
   demoUrl: string;
   thumbnail: string;
-  preview: any;
+
 }
 
 
@@ -43,13 +44,14 @@ export default function Component() {
     level: '',
     category: 'development',
     demoUrl: 'https://www.google.com',
-    thumbnail: '',
-    preview: '',
+    thumbnail: ''
   });
  console.log(courseInfo.thumbnail);
  
   const [pageError, setPageError] = useState(false);
-
+  const {user}=useSelector((state:any)=>state.auth)
+  console.log(user);
+  
   const [benefits, setBenefits] = useState([{ title: '', category: '' }]);
   const [prerequisites, setPrerequisites] = useState([{ title: '', category: '' }]);
   const [courseContentData, setCourseContentData] = useState({
@@ -61,7 +63,9 @@ export default function Component() {
     links: [{ title: 'no', url: 'no' }],
     suggestion: 'no',
   });
-
+const instructor:any = {
+    name: user?.name || 'John Doe',
+    avatar:  user?.avatar?.url || '/avatar.jpg', }
   const steps = ['Course Information', 'Course Content', 'Benefits & Prerequisites', 'Preview'];
 
   const handleInputChange = (
@@ -81,10 +85,10 @@ export default function Component() {
         if (fileReader.readyState === 2 && typeof fileReader.result === "string") {
           setCourseInfo((prev) => ({
             ...prev,
-            preview: fileReader.result,
+            thumbnail: fileReader.result as string,
           }));
-
-          courseInfo.thumbnail = fileReader.result;
+         
+        
        
         
         }
@@ -127,7 +131,8 @@ export default function Component() {
         benefits,
         prerequisites,
         courseContentData,
-      };
+        instructor
+            };
       const response: any = await createCourse(payload).unwrap();
       if (response.success) {
         toast.success("Course created successfully");
@@ -272,9 +277,9 @@ export default function Component() {
                   <Label htmlFor="thumbnail" className="text-sm font-medium">Course Thumbnail</Label>
                   <Card className="overflow-hidden">
                     <CardContent className="p-4">
-                      {courseInfo.preview ? (
+                      {courseInfo.thumbnail ? (
                         <Image
-                          src={courseInfo.preview}
+                          src={courseInfo.thumbnail}
                           alt="Course thumbnail preview"
                           width={300}
                           height={200}
@@ -519,7 +524,7 @@ export default function Component() {
             <Card className="overflow-hidden">
               <CardHeader className="relative">
                 <img
-                  src={courseInfo.preview || "/placeholder.svg"}
+                  src={courseInfo.thumbnail || "/placeholder.svg"}
                   alt={courseInfo.name}
                   className="absolute inset-0 h-full w-full object-cover"
                 />

@@ -316,7 +316,7 @@ export default function Component() {
                               <Input id="role" name="role" value={account.role} disabled />
                               {account.role === 'User' && (
                                 <AlertDialog>
-                                  
+
                                   <AlertDialogTrigger asChild>
                                     <Button variant="outline">
                                       <UserPlus className="mr-2 h-4 w-4" />
@@ -340,8 +340,8 @@ export default function Component() {
                             </div>
                           </div>
                         </div>
-                        <div 
-                       // className="grid grid-cols-1 gap-4 sm:grid-cols-2"
+                        <div
+                        // className="grid grid-cols-1 gap-4 sm:grid-cols-2"
                         >
                           <Button type="submit">Save Account Details</Button>
                         </div>

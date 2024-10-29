@@ -11,8 +11,10 @@ dotenv.config();
 
 // create course
 export const createCourse = CatchAsyncError(
-    async (req: Request, res: Response, next: NextFunction) => {  
-        const course = await CourseModel.create(req);
+    async (data:any, res: Response, next: NextFunction) => { 
+        console.log(data);
+         
+        const course = await CourseModel.create(data);
         res.status(201).json({
             success: true,
             course,

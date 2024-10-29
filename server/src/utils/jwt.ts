@@ -16,7 +16,7 @@ interface ITokenOptions {
 }
 
 // parse environment variables to ingrates with  fallback value
-const accessTokenExpires = parseInt(process.env.ACCESS_TOKEN_EXPIRES || "15m");
+const accessTokenExpires = parseInt(process.env.ACCESS_TOKEN_EXPIRES || "30m");
 const refreshTokenExpires = parseInt(process.env.REFRESH_TOKEN_EXPIRES || "1y");
 
 //   options for cookies

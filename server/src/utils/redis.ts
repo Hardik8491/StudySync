@@ -27,6 +27,9 @@ const getRedisUrl = () => {
 };
 
 const redisClient = new redis(getRedisUrl());
+// redisClient.flushall().then(() => {
+//     console.log("All Redis databases emptied");
+//   });
 
 export default redisClient;
 
